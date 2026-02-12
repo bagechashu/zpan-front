@@ -19,13 +19,13 @@
   <div style="height: calc(100% - 58px)">
     <el-row class="toolbar">
       <el-dropdown size="small" style="margin-right: 10px" @command="onUploadSelect">
-        <el-button type="primary" size="small" icon="el-icon-upload" @click="onUploadSelect('file')">上传</el-button>
+        <el-button type="primary" size="small" icon="el-icon-upload" @click="onUploadSelect('file')">{{ $t('disk.upload') }}</el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="file">上传文件</el-dropdown-item>
-          <el-dropdown-item command="folder">上传文件夹</el-dropdown-item>
+          <el-dropdown-item command="file">{{ $t('disk.upload-file') }}</el-dropdown-item>
+          <el-dropdown-item command="folder">{{ $t('disk.upload-folder') }}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <el-button type="primary" size="small" icon="el-icon-folder-add"  @click="openCreateFolderDiglog" plain>新建文件夹</el-button>
+      <el-button type="primary" size="small" icon="el-icon-folder-add"  @click="openCreateFolderDiglog" plain>{{ $t('op.create-folder') }}</el-button>
       <el-button-group v-show="selectedItems.length > 0" style="margin-left: 10px">
         <el-button type="primary" icon="el-icon-download" size="medium" plain @click="onOutlinkClick">{{ $t("disk.download") }}</el-button>
         <!-- <el-button type="primary" icon="el-icon-share" size="medium" @click="share" plain>分享</el-button> -->
@@ -155,8 +155,8 @@ export default {
     openCreateFileDiglog() {
       var filename 
       var fileext = '.md'
-      var message = <el-input placeholder="请输入内容" v-model={filename} class="input-with-select">
-    <el-select v-model={fileext} slot="append" placeholder="请选择" style="width: 70px">
+      var message = <el-input placeholder={this.$t('tips.create-file')} v-model={filename} class="input-with-select">
+    <el-select v-model={fileext} slot="append" placeholder={this.$t('dialog.upload-placeholder')} style="width: 70px">
       <el-option label=".txt" value=".txt"></el-option>
       <el-option label=".md" value=".md"></el-option>
     </el-select>
@@ -211,9 +211,9 @@ export default {
       this.linkLoader(obj).then((link) => {
         const h = this.$createElement;
         this.$msgbox({
-          title: "获取外链",
+          title: this.$t("disk.outlink-title"),
           message: h("p", null, link),
-          confirmButtonText: "确定",
+          confirmButtonText: this.$t("op.confirm"),
         });
       });
     },

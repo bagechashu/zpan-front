@@ -6,7 +6,7 @@ export default {
     this.$zpan.User.signout().then((ret) => {
       this.$message({
         type: "success",
-        message: "登出成功，欢迎下次再来~",
+        message: this.$t("msg.signout-success"),
       });
       this.$router.push({ name: "signin" });
     });

@@ -6,7 +6,7 @@
     </div>
 
     <el-card shadow="never" style="margin-top: 10px; padding-bottom: 20px">
-      <el-table :data="rows" size="medium" style="width: 100%">
+      <el-table :data="rows" size="medium" style="width: 100%" :empty-text="$t('table.empty-text')">
         <el-table-column prop="id" label="ID" width="80"> </el-table-column>
         <el-table-column prop="profile.nickname" :label="$t('admin.label-nickname')" width="120"> </el-table-column>
         <el-table-column prop="email" :label="$t('admin.label-email')"> </el-table-column>

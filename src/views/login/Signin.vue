@@ -5,26 +5,26 @@
       <el-card class="box-card" style="padding: 10px 20px">
         <div slot="header">
           <i class="icon el-icon-lock"></i>
-          <p class="title">用户登录</p>
+          <p class="title">{{ $t('login.title') }}</p>
         </div>
 
         <el-form ref="formItem" :model="formItem" :rules="rules">
           <el-form-item prop="email">
-            <el-input v-model="formItem.email" placeholder="用户名或邮箱"></el-input>
+            <el-input v-model="formItem.email" :placeholder="$t('login.email-placeholder')"></el-input>
           </el-form-item>
           <el-form-item prop="password">
-            <el-input v-model="formItem.password" type="password" placeholder="密码" @keyup.enter.native="signIn('formItem')"></el-input>
+            <el-input v-model="formItem.password" type="password" :placeholder="$t('login.password-placeholder')" @keyup.enter.native="signIn('formItem')"></el-input>
           </el-form-item>
           <el-form-item>
             <el-row>
-              <el-button type="primary" @click="signIn('formItem')" style="width: 100%">登录</el-button>
+              <el-button type="primary" @click="signIn('formItem')" style="width: 100%">{{ $t('login.signin-btn') }}</el-button>
             </el-row>
             <el-row>
               <el-col :span="12">
-                <el-link type="primary" :underline="false" @click="goto('reset_apply')">忘记密码</el-link>
+                <el-link type="primary" :underline="false" @click="goto('reset_apply')">{{ $t('login.forgot-password') }}</el-link>
               </el-col>
               <el-col :span="12" style="text-align: right">
-                <el-link type="primary" :underline="false" @click="goto('signup')">注册账号</el-link>
+                <el-link type="primary" :underline="false" @click="goto('signup')">{{ $t('login.signup') }}</el-link>
               </el-col>
             </el-row>
           </el-form-item>
@@ -38,14 +38,18 @@
 export default {
   data() {
     return {
-      rules: {
-        email: [{ required: true, message: "请输入邮箱地址", trigger: "blur" }],
-      },
       redirect: "/",
       formItem: {
         email: "",
       },
     };
+  },
+  computed: {
+    rules() {
+      return {
+        email: [{ required: true, message: this.$t('login.email-required'), trigger: "blur" }],
+      };
+    }
   },
   methods: {
     goto(name) {

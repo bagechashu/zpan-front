@@ -1,6 +1,7 @@
 {
   "click-copy-link": "点击复制链接",
   "copy-link": "复制链接",
+  "create-folder": "新建文件夹",
   "day": "天",
   "op": {
     "close": "关闭",
@@ -29,7 +30,8 @@
     "save-success": "保存成功",
     "clean-success": "清理成功",
     "recovery-success": "恢复成功",
-    "cancel-success": "取消成功"
+    "cancel-success": "取消成功",
+    "signout-success": "登出成功，欢迎下次再来~"
   },
   "dialog": {
     "moveto-title": "移动到",
@@ -42,16 +44,26 @@
     "share-title": "分享链接",
     "upload-click": "点击上传",
     "upload-tips": "将文件拖到此处，或",
-    "upload-title": "上传队列"
+    "upload-title": "上传队列",
+    "upload-placeholder": "请选择"
   },
   "disk": {
     "delete": "删除",
     "download": "下载",
     "folder": "新建",
-    "upload": "上传"
+    "upload": "上传",
+    "upload-file": "上传文件",
+    "upload-folder": "上传文件夹",
+    "outlink-title": "获取外链"
   },
   "ft": {
-    "breadcrumb": "全部文件"
+    "breadcrumb": "全部文件",
+    "loaded-all": "已全部加载，共{total}个",
+    "loading": "已加载{loaded}个，共{total}个"
+  },
+  "share-list": {
+    "loaded-all": "已全部加载，共{total}个",
+    "loading": "已加载{loaded}个，共{total}个"
   },
   "ftb": {
     "move": "移动到",
@@ -82,12 +94,20 @@
     "expired": "失效时间",
     "link": "链接",
     "name": "名称",
-    "cancel": "取消分享"
+    "cancel": "取消分享",
+    "operation": "操作",
+    "permanent": "永久有效"
+  },
+  "table": {
+    "empty-text": "暂无数据"
   },
   "recyclebin": {
     "recovery": "确认恢复？",
     "delete": "彻底删除？",
-    "clean": "清空回收站"
+    "clean": "清空回收站",
+    "filename": "文件名",
+    "size": "大小",
+    "deleted-time": "删除时间"
   },
   "tips": {
     "batch-delete": "此操作将永久删除所选文件，是否继续？",
@@ -96,11 +116,12 @@
     "remove": "此操作将文件移动到回收站, 是否继续?",
     "rename": "请输入新的名称",
     "recyclebin": "提示：回收站也占用网盘空间，请及时清理哦~",
+    "deleting": "正在删除...",
+    "cleaning": "正在清理...",
     "share-cancel": "取消分享后，该条分享记录将被删除，好友将无法再访问此分享链接。 您确认要取消分享吗？",
     "recovery": "确认还原选中的文件？",
     "delete": "此操作将彻底删除该文件, 是否继续?",
     "clean": "确认清空回收站？",
-    "deleting": "正在删除...",
     "disable": "禁用后将不可用，是否继续？",
     "enable": "确认启用？",
     "secret-reset": "重置后，老的秘钥将无法使用，是否继续？",
@@ -116,19 +137,31 @@
     "signout": "退出"
   },
   "title": {
+    "home": "首页",
     "disk": "我的文件",
+    "picture": "我的图床",
     "share": "我的分享",
     "recyclebin": "回收站",
-    "picture": "我的图床",
     "profile": "个人信息",
     "security": "安全设置",
     "developer": "开发者设置",
-    "storage-quota": "存储配额",
+    "settings": "个人设置",
     "admin": "管理后台",
-    "storages": "存储管理",
     "users": "用户管理",
-    "settings": "站点设置",
-    "settings-email": "发信邮箱"
+    "storages": "存储管理",
+    "settings-email": "发信邮箱",
+    "signin": "用户登录",
+    "signout": "用户登出",
+    "activate": "账户激活",
+    "signup": "用户注册",
+    "reset_apply": "密码找回",
+    "reset_confirm": "密码找回",
+    "share-info": "分享详情",
+    "share-draw": "提取文件",
+    "editor": "编辑器",
+    "viewer": "查看器",
+    "notfound": "页面未找到",
+    "installer": "安装"
   },
   "year": "年",
   "admin": {
@@ -168,5 +201,59 @@
     "S3": "亚马逊",
     "US3": "UColud",
     "USS": "又拍云"
+  },
+  "reset": {
+    "title": "找回密码",
+    "email-placeholder": "电子邮箱",
+    "send-email-btn": "发送密码重置邮件",
+    "back-to-signin": "返回登录",
+    "email-required": "请输入邮箱地址",
+    "email-invalid": "请输入正确的邮箱地址",
+    "send-success": "找回密码邮件发送成功!"
+  },
+  "login": {
+    "title": "用户登录",
+    "email-placeholder": "用户名或邮箱",
+    "password-placeholder": "密码",
+    "signin-btn": "登录",
+    "forgot-password": "忘记密码",
+    "signup": "注册账号",
+    "email-required": "请输入邮箱地址"
+  },
+  "user": {
+    "create-dialog-title": "添加用户",
+    "email-label": "邮箱",
+    "email-placeholder": "电子邮箱",
+    "role-label": "角色",
+    "role-placeholder": "请选择用户角色",
+    "role-admin": "管理员",
+    "role-member": "注册用户",
+    "storage-label": "存储空间",
+    "storage-placeholder": "请设置存储配额",
+    "storage-unit": "单位",
+    "password-label": "密码",
+    "password-placeholder": "密码",
+    "password-confirm-label": "密码确认",
+    "password-confirm-placeholder": "密码确认",
+    "password-required": "请输入密码",
+    "password-confirm-required": "请再次输入密码",
+    "password-mismatch": "两次输入密码不一致!",
+    "email-required": "请输入邮箱地址",
+    "email-invalid": "请输入正确的邮箱地址"
+  },
+  "signup": {
+    "title": "用户注册",
+    "email-placeholder": "电子邮箱",
+    "password-placeholder": "密码",
+    "password-confirm-placeholder": "密码确认",
+    "invitation-placeholder": "邀请码",
+    "signup-btn": "注册账号",
+    "back-to-signin": "返回登录",
+    "email-required": "请输入邮箱地址",
+    "email-invalid": "请输入正确的邮箱地址",
+    "password-required": "请输入密码",
+    "password-confirm-required": "请再次输入密码",
+    "password-mismatch": "两次输入密码不一致!",
+    "signup-success": "注册成功!"
   }
 }

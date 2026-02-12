@@ -68,17 +68,26 @@ const setTitle = (title, next) => {
       fullTitle += `- ${title}`
     }
     window.document.title = fullTitle;
-    i18n.locale = sOpt.locale
+    // Only set locale if it's a valid loaded locale
+    if (sOpt.locale && ['en', 'zh-CN'].includes(sOpt.locale)) {
+      i18n.locale = sOpt.locale
+    }
   }).catch(error => {
     if (error.response && error.response.status == 520) {
       next({ name: "installer" })
       return
     }
+    // If API fails, set a default title
+    window.document.title = document.title || 'ZPAN';
   });
 }
 
 router.beforeEach((to, from, next) => {
-  setTitle(i18n.t(`title.${to.name}`), next);
+  let pageTitle = i18n.t(`title.${to.name}`);
+  if (!pageTitle || pageTitle === `title.${to.name}`) {
+    pageTitle = '';
+  }
+  setTitle(pageTitle, next);
 
   next()
 });

@@ -6,12 +6,16 @@
   "op": {
     "close": "Close",
     "confirm": "Confirm",
+    "init": "Initialize",
+    "reset": "Reset",
     "cancel": "Cancel",
     "enable": "Enable",
     "disable": "Disable",
     "rename": "Rename",
     "delete": "Delete",
-    "batch-delete": "Batch Delete"
+    "batch-delete": "Batch Delete",
+    "create-folder": "New Folder",
+    "create-file": "New File"
   },
   "msg": {
     "success": "Success",
@@ -25,11 +29,12 @@
     "rename-success": "Renamed!",
     "save-success": "Saved!",
     "clean-success": "Cleaned!",
-    "recovery-success": "Recoveried!"
+    "recovery-success": "Recoveried!",
+    "signout-success": "Signed out successfully, see you next time~"
   },
   "dialog": {
     "moveto-title": "MoveTo",
-    "outlink-title": "Outlink",
+    "outlink-title": "Download Link",
     "share-drawcode": "Draw Code",
     "share-drawcode-switch": "Link protect using password",
     "share-link-with-pwd": "Link with password",
@@ -38,16 +43,26 @@
     "share-title": "Share Link",
     "upload-click": "click to upload",
     "upload-tips": "Drag the file here, or",
-    "upload-title": "Upload Queue"
+    "upload-title": "Upload Queue",
+    "upload-placeholder": "Please select"
   },
   "disk": {
     "delete": "Delete",
     "download": "Download",
     "folder": "New Folder",
-    "upload": "Upload"
+    "upload": "Upload",
+    "upload-file": "Upload File",
+    "upload-folder": "Upload Folder",
+    "outlink-title": "Get External Link"
   },
   "ft": {
-    "breadcrumb": "All files"
+    "breadcrumb": "All files",
+    "loaded-all": "All loaded, Total {total}",
+    "loading": "Loaded {loaded}, Total {total}"
+  },
+  "share-list": {
+    "loaded-all": "All loaded, Total {total}",
+    "loading": "Loaded {loaded}, Total {total}"
   },
   "ftb": {
     "move": "MoveTo",
@@ -77,23 +92,39 @@
     "drawfile": "Draw",
     "expired": "ExpireTime",
     "link": "ShareLink",
-    "name": "Name"
+    "name": "Name",
+    "cancel": "Cancel Share",
+    "operation": "Operation",
+    "permanent": "Permanent"
+  },
+  "table": {
+    "empty-text": "No data"
   },
   "recyclebin": {
     "recovery": "Recover file(s)?",
     "delete": "Delete forever?",
-    "clean": "Empty the recycle bin"
+    "clean": "Empty the recycle bin",
+    "filename": "Filename",
+    "size": "Size",
+    "deleted-time": "Deleted Time"
   },
   "tips": {
     "batch-delete": "This operation will permanently delete the selected files, do you want to continue?",
     "create-folder": "Please input folder name",
+    "create-file": "Please input file name",
     "remove": "This operation will permanently delete the file, do you want to continue?",
     "rename": "Please input newly name",
     "recyclebin": "Tip: The recycle bin also occupies the network disk space, please clean it up in time~",
+    "deleting": "Deleting...",
+    "cleaning": "Cleaning...",
+    "share-cancel": "After canceling the sharing, this sharing record will be deleted and your friends will no longer be able to access this sharing link. Are you sure you want to cancel the sharing?",
     "recovery": "Are you sure you want to recover the selected file(s)?",
     "delete": "Deleted files cannot be recovered, are you sure you want to permanently delete the selected file(s)?",
     "clean": "Are you sure to empty the Recycle Bin?",
-    "deleting": "Deleting..."
+    "disable": "After being disabled, it will no longer be usable. Do you want to continue?",
+    "enable": "Confirm activation?",
+    "secret-reset": "After resetting, the old key will no longer be usable. Do you want to continue?",
+    "secret-init": "You haven't enabled developer privileges yet. Would you like to do so?"
   },
   "topbar": {
     "netdisk": "Netdisk",
@@ -105,14 +136,31 @@
     "signout": "Sign out"
   },
   "title": {
+    "home": "Home",
     "disk": "My Files",
+    "picture": "Image Hosting",
     "share": "My Shares",
     "recyclebin": "Recycle Bin",
-    "picture": "Image Hosting",
     "profile": "Profile",
     "security": "Security",
     "developer": "Developer Settings",
-    "storage-quota": "Storage Quota"
+    "settings": "Settings",
+    "admin": "Dashboard",
+    "users": "User Management",
+    "storages": "Storage Management",
+    "settings-email": "Email Settings",
+    "signin": "Sign In",
+    "signout": "Sign Out",
+    "activate": "Account Activation",
+    "signup": "Sign Up",
+    "reset_apply": "Password Recovery",
+    "reset_confirm": "Password Recovery",
+    "share-info": "Share Details",
+    "share-draw": "Extract File",
+    "editor": "Editor",
+    "viewer": "Viewer",
+    "notfound": "Page Not Found",
+    "installer": "Installation"
   },
   "year": "Years",
   "admin": {
@@ -152,5 +200,59 @@
     "S3": "AWSCloud",
     "US3": "UColud",
     "USS": "UPYun"
+  },
+  "reset": {
+    "title": "Password Recovery",
+    "email-placeholder": "Email address",
+    "send-email-btn": "Send Password Reset Email",
+    "back-to-signin": "Back to Sign In",
+    "email-required": "Please enter your email address",
+    "email-invalid": "Please enter a valid email address",
+    "send-success": "Password reset email sent successfully!"
+  },
+  "login": {
+    "title": "User Sign In",
+    "email-placeholder": "Email or username",
+    "password-placeholder": "Password",
+    "signin-btn": "Sign In",
+    "forgot-password": "Forgot Password",
+    "signup": "Sign Up",
+    "email-required": "Please enter your email address"
+  },
+  "user": {
+    "create-dialog-title": "Add User",
+    "email-label": "Email",
+    "email-placeholder": "Email address",
+    "role-label": "Role",
+    "role-placeholder": "Please select user role",
+    "role-admin": "Admin",
+    "role-member": "Member",
+    "storage-label": "Storage Space",
+    "storage-placeholder": "Set storage quota",
+    "storage-unit": "Unit",
+    "password-label": "Password",
+    "password-placeholder": "Password",
+    "password-confirm-label": "Confirm Password",
+    "password-confirm-placeholder": "Confirm password",
+    "password-required": "Please enter a password",
+    "password-confirm-required": "Please confirm your password",
+    "password-mismatch": "The passwords are not the same!",
+    "email-required": "Please enter your email address",
+    "email-invalid": "Please enter a valid email address"
+  },
+  "signup": {
+    "title": "User Registration",
+    "email-placeholder": "Email address",
+    "password-placeholder": "Password",
+    "password-confirm-placeholder": "Confirm password",
+    "invitation-placeholder": "Invitation code",
+    "signup-btn": "Sign Up",
+    "back-to-signin": "Back to Sign In",
+    "email-required": "Please enter your email address",
+    "email-invalid": "Please enter a valid email address",
+    "password-required": "Please enter a password",
+    "password-confirm-required": "Please confirm your password",
+    "password-mismatch": "The passwords are not the same!",
+    "signup-success": "Sign up successfully!"
   }
 }

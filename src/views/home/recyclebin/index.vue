@@ -13,9 +13,9 @@
         <span class="loadtips" style="float: right">{{ loadedtips }}</span>
       </el-row>
 
-      <el-table :data="rows" style="width: 100%" highlight-current-row>
+      <el-table :data="rows" style="width: 100%" highlight-current-row :empty-text="$t('table.empty-text')">
         <el-table-column type="selection" width="28"></el-table-column>
-        <el-table-column label="文件名" prop="name" min-width="200">
+        <el-table-column :label="$t('recyclebin.filename')" prop="name" min-width="200">
           <template slot-scope="scope">
             <i v-if="scope.row.dirtype" class="matter-icon el-icon-folder" style="color: #ffc402"></i>
             <i v-else class="matter-icon el-icon-document"></i>
@@ -34,13 +34,13 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column label="大小" prop="size">
+        <el-table-column :label="$t('recyclebin.size')" prop="size">
           <template slot-scope="scope">
             <div v-if="scope.row.dirtype">-</div>
             <div v-else>{{ scope.row.size }}</div>
           </template>
         </el-table-column>
-        <el-table-column label="删除时间" prop="created">
+        <el-table-column :label="$t('recyclebin.deleted-time')" prop="created">
           <template slot-scope="scope">{{ scope.row.created | moment }}</template>
         </el-table-column>
       </el-table>
@@ -62,10 +62,10 @@ export default {
     loadedtips() {
       let loadedNum = this.rows.length;
       if (loadedNum == this.total) {
-        return `已全部加载，共${this.total}个`;
+        return this.$t('ft.loaded-all', { total: this.total });
       }
 
-      return `已加载${loadedNum}个，共${this.total}个`;
+      return this.$t('ft.loading', { loaded: loadedNum, total: this.total });
     },
   },
   methods: {
@@ -98,7 +98,7 @@ export default {
       }).then(() => {
         const loading = this.$loading({
           lock: true,
-          text: "Deleting",
+          text: this.$t('tips.deleting'),
           spinner: "el-icon-loading",
           background: "rgba(0, 0, 0, 0.7)",
         });
@@ -120,7 +120,7 @@ export default {
       }).then(() => {
         const loading = this.$loading({
           lock: true,
-          text: "Cleaning",
+          text: this.$t('tips.cleaning'),
           spinner: "el-icon-loading",
           background: "rgba(0, 0, 0, 0.7)",
         });

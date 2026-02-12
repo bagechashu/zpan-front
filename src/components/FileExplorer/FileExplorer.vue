@@ -73,10 +73,10 @@ export default {
     loadedtips() {
       let loadedNum = this.rows.length;
       if (loadedNum == this.total) {
-        return `已全部加载，共${this.total}个`;
+        return this.$t('ft.loaded-all', { total: this.total });
       }
 
-      return `已加载${loadedNum}个，共${this.total}个`;
+      return this.$t('ft.loading', { loaded: loadedNum, total: this.total });
     },
   },
   methods: {

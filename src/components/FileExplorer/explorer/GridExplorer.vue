@@ -1,9 +1,14 @@
 <template>
   <div class="explorer">
-    <div class="explorer-item" v-for="item in data" :key="item.alias" @click="onNameClick(item)">
-      <i v-if="item.dirtype" class="matter-icon el-icon-folder" style="color: #ffc402"></i>
-      <i v-else :class="`iconfont ${type2icon(item.type)}`"></i>
-      <p>{{ item.name }}</p>
+    <div v-if="data && data.length > 0" style="width: 100%">
+      <div class="explorer-item" v-for="item in data" :key="item.alias" @click="onNameClick(item)">
+        <i v-if="item.dirtype" class="matter-icon el-icon-folder" style="color: #ffc402"></i>
+        <i v-else :class="`iconfont ${type2icon(item.type)}`"></i>
+        <p>{{ item.name }}</p>
+      </div>
+    </div>
+    <div v-else style="width: 100%; text-align: center; padding: 40px 0; color: #999;">
+      {{ $t('table.empty-text') }}
     </div>
   </div>
 </template>

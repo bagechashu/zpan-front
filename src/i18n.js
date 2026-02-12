@@ -19,10 +19,12 @@ function loadLocaleMessages() {
   return messages
 }
 
+const messages = loadLocaleMessages()
+
 const i18n = new VueI18n({
   locale: process.env.VUE_APP_I18N_LOCALE || DEFAULT_LANG,
   fallbackLocale: process.env.VUE_APP_I18N_FALLBACK_LOCALE || DEFAULT_LANG,
-  messages: loadLocaleMessages()
+  messages: messages
 })
 
 
@@ -32,10 +34,26 @@ export const setup = lang => {
     locale = lang
     localStorage.setItem(LOCALE_KEY, locale);
   } else if (!locale) {
-    locale = navigator.language
+    // Try to match navigator.language with available locales
+    const navLang = navigator.language;
+    const availableLocales = Object.keys(messages);
+    
+    // Exact match first
+    if (availableLocales.includes(navLang)) {
+      locale = navLang;
+    } else {
+      // Try to match language prefix (e.g., 'zh' from 'zh-CN')
+      const langPrefix = navLang.split('-')[0];
+      const matched = availableLocales.find(l => l.startsWith(langPrefix));
+      locale = matched || DEFAULT_LANG;
+    }
+  } else {
+    // Validate stored locale exists in loaded messages
+    if (!messages[locale]) {
+      locale = DEFAULT_LANG;
+    }
   }
 
-  Vue.config.locale = locale
   i18n.locale = locale
 }
 

@@ -12,7 +12,7 @@
       <span class="loadtips" style="float: right">{{ loadedtips }}</span>
     </el-row>
 
-    <el-table :data="rows" @current-change="onCurrentChange" :expand-row-keys="expandRowKeys" row-key="id" highlight-current-row style="width: 100%">
+    <el-table :data="rows" @current-change="onCurrentChange" :expand-row-keys="expandRowKeys" row-key="id" highlight-current-row style="width: 100%" :empty-text="$t('table.empty-text')">
       <el-table-column type="expand" width="40">
         <template slot-scope="props">
           <p>
@@ -34,13 +34,13 @@
       </el-table-column>
       <el-table-column prop="expired" :label="$t('share.expired')">
         <template slot-scope="scope">
-          <span v-if="isForever(scope.row.expire_at)">永久有效</span>
+          <span v-if="isForever(scope.row.expire_at)">{{ $t('share.permanent') }}</span>
           <span v-else>{{ scope.row.expire_at | moment }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作">
+      <el-table-column :label="$t('share.operation')">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" @click="onDelete(scope.$index, scope.row)">取消分享</el-button>
+          <el-button size="mini" type="text" @click="onDelete(scope.$index, scope.row)">{{ $t('share.cancel') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -60,10 +60,10 @@ export default {
     loadedtips() {
       let loadedNum = this.rows.length;
       if (loadedNum == this.total) {
-        return `已全部加载，共${this.total}个`;
+        return this.$t('share-list.loaded-all', { total: this.total });
       }
 
-      return `已加载${loadedNum}个，共${this.total}个`;
+      return this.$t('share-list.loading', { loaded: loadedNum, total: this.total });
     },
   },
   methods: {
