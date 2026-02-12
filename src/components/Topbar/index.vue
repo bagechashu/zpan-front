@@ -124,7 +124,7 @@ export default {
         this.storage = {
           used: utils.formatBytes(this.user.storage.used, 0),
           max: utils.formatBytes(this.user.storage.max, 0),
-          percentage: Math.round((this.user.storage.used / this.user.storage.max) * 10000) / 100,
+          percentage: this.user.storage.max === 0 ? '' : Math.round((this.user.storage.used / this.user.storage.max) * 10000) / 100,
         };
       });
     },
