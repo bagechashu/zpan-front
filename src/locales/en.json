@@ -170,6 +170,7 @@
     "btn-quota-update": "Change Quota",
     "btn-storage-add": "Create Storage",
     "btn-edit": "Edit",
+    "btn-scan": "Scan",
     "label-nickname": "Nickname",
     "label-email": "Email",
     "label-role": "Role",

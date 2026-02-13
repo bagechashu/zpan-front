@@ -171,6 +171,7 @@
     "btn-quota-update": "调整配额",
     "btn-storage-add": "创建存储",
     "btn-edit": "编辑",
+    "btn-scan": "扫描",
     "label-nickname": "用户昵称",
     "label-email": "Email",
     "label-role": "角色",

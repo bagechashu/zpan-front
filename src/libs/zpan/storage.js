@@ -22,6 +22,10 @@ class zStorage {
     delete(id) {
         return axios.delete(`/storages/${id}`)
     }
+
+    scan(id, prefix = '') {
+        return axios.post(`/storages/${id}/scan`, { prefix })
+    }
 }
 
 export default zStorage;
