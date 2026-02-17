@@ -22,6 +22,14 @@
           </p>
         </div>
 
+        <el-alert 
+          title="下载链接过期提示" 
+          type="warning" 
+          description="下载链接有固定的有效期。如果已失效，请刷新页面后重新点击下载。"
+          :closable="true"
+          style="margin-bottom: 10px;">
+        </el-alert>
+
         <FileExplorer ref="fexp" class="file-explorer" :dataLoader="dataLoader" :linkLoader="linkLoader" :rowButtons="rowButtons" :rootDir="rootDir" @selection-change="onSelectionChange" />
       </el-card>
 
@@ -40,6 +48,14 @@
             <span>失效时间：{{ expireTime }}</span>
           </p>
         </div>
+
+        <el-alert 
+          title="下载链接过期提示" 
+          type="warning" 
+          description="下载链接有固定的有效期。如果已失效，请刷新页面后重新点击下载。"
+          :closable="true"
+          style="margin-bottom: 10px;">
+        </el-alert>
 
         <div class="content">
           <div>
