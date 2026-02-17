@@ -94,7 +94,10 @@ export default {
       return this.menus && this.menus.length > 0;
     },
     showAdmin() {
-      return Cookie.get("z-role") == "admin";
+      // 优先从 Vuex store 获取用户角色信息
+      if (this.$store.state.user && this.$store.state.user.roles) {
+        return this.$store.state.user.roles.includes('admin');
+      }
     },
     menuActive() {
       return `/${this.$route.params.sname}`;
@@ -120,6 +123,13 @@ export default {
         if (this.profile.locale) {
           this.$i18n.locale = this.profile.locale;
         }
+
+        // 保存用户信息到 Vuex store
+        this.$store.dispatch('setUser', {
+          uid: this.user.id,
+          username: this.user.username,
+          roles: this.user.roles || this.user.role
+        });
 
         this.storage = {
           used: utils.formatBytes(this.user.storage.used, 0),

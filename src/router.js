@@ -73,6 +73,13 @@ const setTitle = (title, next) => {
       i18n.locale = sOpt.locale
     }
   }).catch(error => {
+    // 忽略认证失败（401/403）的错误，这在未登录时是正常的
+    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+      // 设置默认标题
+      window.document.title = document.title || 'ZPAN';
+      return;
+    }
+    
     if (error.response && error.response.status == 520) {
       next({ name: "installer" })
       return

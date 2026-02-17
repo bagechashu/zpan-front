@@ -11,6 +11,9 @@ export default {
   computed: {},
   methods: {},
   mounted() {
+    // 初始化 token：从 cookie 恢复到 Vuex store
+    this.$store.dispatch('initToken');
+    
     // setup clipboard
     this.$clipboard.on("success", (e) => {
       this.$message.success(this.$t("msg.copy-success"));
