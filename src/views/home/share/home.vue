@@ -7,7 +7,7 @@
       </el-empty>
 
       <!-- for folder -->
-      <el-card v-else-if="matter.dirtype" class="folder-card" shadow="never" body-style="height: 100%">
+      <el-card v-else-if="matter.dirtype" class="folder-card" shadow="never">
         <div slot="header" class="header clearfix">
           <div>
             <span class="name">{{ matter.name }}</span>
@@ -22,7 +22,7 @@
           </p>
         </div>
 
-        <FileExplorer ref="fexp" style="height: calc(100% - 80px)" :dataLoader="dataLoader" :linkLoader="linkLoader" :rowButtons="rowButtons" :rootDir="rootDir" @selection-change="onSelectionChange" />
+        <FileExplorer ref="fexp" class="file-explorer" :dataLoader="dataLoader" :linkLoader="linkLoader" :rowButtons="rowButtons" :rootDir="rootDir" @selection-change="onSelectionChange" />
       </el-card>
 
       <!-- for file -->
@@ -88,12 +88,21 @@ export default {
   methods: {
     dataLoader(dir) {
       return new Promise((resolve, reject) => {
-        if (!this.info.id || this.info.type) {
+        // 只有当 matter 存在且是目录时，才加载子文件列表
+        if (!this.matter.id || !this.matter.dirtype) {
+          resolve({ list: [], total: 0 });
           return;
         }
 
         let alias = this.$route.params.alias;
-        this.$zpan.Share.listMatters(alias, { dir: dir }).then((ret) => {
+        // 构建查询目录：去掉前导斜杠转成相对路径，确保末尾有斜杠
+        let queryDir = dir ? (this.rootDir + dir) : this.rootDir;
+        queryDir = queryDir.replace(/^\//, ''); // 移除前导斜杠，转成相对路径
+        if (!queryDir.endsWith('/')) {
+          queryDir += '/';
+        }
+        
+        this.$zpan.Share.listMatters(alias, { dir: queryDir }).then((ret) => {
           let data = ret.data;
           data.list = data.list.map((item) => {
             item.size = utils.formatBytes(item.size, 1);
@@ -102,11 +111,17 @@ export default {
             return item;
           });
           resolve(data);
-        });
+        }).catch(reject);
       });
     },
     linkLoader(obj) {
       return new Promise((resolve, reject) => {
+        // If the object already has URL (e.g., from getMatter), use it directly
+        if (obj.url) {
+          resolve(obj.url);
+          return;
+        }
+        // Otherwise, fetch the matter details to get the URL
         this.$zpan.Share.getMatter(this.info.alias, obj.alias)
           .then((ret) => {
             resolve(ret.url);
@@ -120,6 +135,11 @@ export default {
         a.href = link;
         a.download = obj.name;
         a.click();
+      }).catch((err) => {
+        this.$message({
+          type: "error",
+          message: "下载链接获取失败：" + (err.message || err),
+        });
       });
     },
     onSelectionChange(selection) {
@@ -180,11 +200,27 @@ export default {
   margin: 0 auto;
   height: 600px;
 }
+
 .folder-card {
   min-width: 800px;
   max-width: 1200px;
   margin: 0 auto;
-  height: calc(100% - 120px);
+  height: calc(100vh - 180px);
+  display: flex;
+  flex-direction: column;
+}
+
+/* 处理 el-card 内部结构 */
+.folder-card /deep/ .el-card__body {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.file-explorer {
+  flex: 1;
+  overflow: hidden;
 }
 
 .header .name {
@@ -196,9 +232,11 @@ export default {
   font-size: 12px;
   margin: 10px 0;
 }
+
 .time i {
   width: 18px;
 }
+
 .time span {
   margin-right: 20px;
 }
@@ -209,9 +247,11 @@ export default {
   text-align: center;
   padding-top: 120px;
 }
+
 .content i {
   font-size: 90px;
 }
+
 .content p {
   margin-top: 30px;
 }
