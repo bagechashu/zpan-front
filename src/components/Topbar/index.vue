@@ -141,6 +141,7 @@ export default {
         this.updateStorage();
       }).catch((error) => {
         // 如果请求失败（如 401），忽略错误
+        // eslint-disable-next-line no-console
         console.error('Failed to fetch user profile:', error);
       });
     },

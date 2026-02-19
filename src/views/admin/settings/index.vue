@@ -47,6 +47,7 @@ export default {
       this.$store.dispatch('fetchCoreSite').then((coreSite) => {
         this.form = { ...coreSite };
       }).catch((err) => {
+        // eslint-disable-next-line no-console
         console.error('Failed to fetch core site config:', err);
       });
     },

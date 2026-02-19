@@ -79,6 +79,7 @@ export default {
                 location.replace(this.redirect);
               }).catch((err) => {
                 // 即使获取用户信息失败，也继续重定向
+                // eslint-disable-next-line no-console
                 console.error('Failed to fetch user profile after login:', err);
                 location.replace(this.redirect);
               });

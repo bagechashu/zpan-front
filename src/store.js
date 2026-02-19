@@ -97,6 +97,7 @@ export default new Vuex.Store({
           return response.data
         }
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('Failed to fetch core site config:', error)
         // 失败时返回默认值
         return state.coreSite
@@ -112,6 +113,7 @@ export default new Vuex.Store({
           return response.data
         }
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error('Failed to fetch user profile:', error)
         throw error
       }

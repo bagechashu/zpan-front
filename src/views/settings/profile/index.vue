@@ -66,6 +66,7 @@ export default {
         this.user = userProfile;
         this.profile = userProfile.profile;
       }).catch((err) => {
+        // eslint-disable-next-line no-console
         console.error('Failed to fetch user profile:', err);
         this.$message.error('获取用户信息失败');
       });
