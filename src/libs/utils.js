@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 
 import axios from "axios";
+import zpanAxios from './zpan/axios';
 
 let utils = {
     upload(fileObj, destURL, headers, cancel) {
@@ -20,7 +21,7 @@ let utils = {
 
             if (!destURL) reject('none upload url')
 
-            window.axios.put(destURL, file, options).then((ret) => {
+            zpanAxios.put(destURL, file, options).then((ret) => {
                 if (fileObj.onSuccess) fileObj.onSuccess();
                 resolve(ret)
             }).catch(reject)
