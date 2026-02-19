@@ -73,8 +73,16 @@ export default {
                 roles: ret.roles
               };
               this.$store.dispatch('setUser', user);
+              
+              // 登录成功后，异步获取完整用户信息到 store，然后重定向
+              this.$store.dispatch('fetchUserProfile').then(() => {
+                location.replace(this.redirect);
+              }).catch((err) => {
+                // 即使获取用户信息失败，也继续重定向
+                console.error('Failed to fetch user profile after login:', err);
+                location.replace(this.redirect);
+              });
             }
-            location.replace(this.redirect);
           })
           .catch((err) => {
             console.log(err.response);

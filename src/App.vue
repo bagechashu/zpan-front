@@ -14,6 +14,12 @@ export default {
     // 初始化 token：从 cookie 恢复到 Vuex store
     this.$store.dispatch('initToken');
     
+    // 初始化站点配置：预加载 core.site
+    this.$store.dispatch('fetchCoreSite').catch((error) => {
+      // 忽略错误，可能是安装步骤或未授权状态
+      console.debug('Failed to fetch core site config at init:', error.message);
+    });
+    
     // setup clipboard
     this.$clipboard.on("success", (e) => {
       this.$message.success(this.$t("msg.copy-success"));

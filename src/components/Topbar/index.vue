@@ -84,7 +84,6 @@ export default {
     };
   },
   watch: {
-    $route: "onRouteChange",
     locale(nv) {
       setup(nv);
     },
@@ -104,17 +103,25 @@ export default {
     },
   },
   methods: {
-    onRouteChange(newVal, oldVal) {
-      if (this.logined) {
-        this.userInfo();
-      }
-    },
     onUTotalChange(uTotal) {
       this.ulistTotal = uTotal;
     },
+    // 从 store 获取或请求用户信息
     userInfo() {
-      this.$zpan.User.profileGet().then((ret) => {
-        this.user = ret.data;
+      // 优先从 store 中获取用户完整信息
+      if (this.$store.state.userProfile) {
+        this.user = this.$store.state.userProfile;
+        this.profile = this.user.profile;
+        if (this.profile.avatar == "") {
+          this.profile.avatar = defaultAvatar;
+        }
+        this.updateStorage();
+        return;
+      }
+
+      // 如果 store 中没有，则请求
+      this.$store.dispatch('fetchUserProfile').then((userProfile) => {
+        this.user = userProfile;
         this.profile = this.user.profile;
         if (this.profile.avatar == "") {
           this.profile.avatar = defaultAvatar;
@@ -124,25 +131,37 @@ export default {
           this.$i18n.locale = this.profile.locale;
         }
 
-        // 保存用户信息到 Vuex store
+        // 保存用户信息到 Vuex store（简要信息）
         this.$store.dispatch('setUser', {
           uid: this.user.id,
           username: this.user.username,
           roles: this.user.roles || this.user.role
         });
 
+        this.updateStorage();
+      }).catch((error) => {
+        // 如果请求失败（如 401），忽略错误
+        console.error('Failed to fetch user profile:', error);
+      });
+    },
+    // 更新存储空间显示
+    updateStorage() {
+      if (this.user && this.user.storage) {
         this.storage = {
           used: utils.formatBytes(this.user.storage.used, 0),
           max: utils.formatBytes(this.user.storage.max, 0),
           percentage: this.user.storage.max === 0 ? 0 : Math.round((this.user.storage.used / this.user.storage.max) * 10000) / 100,
         };
-      });
+      }
     },
     onDropdown(index) {
       this.$router.push({ name: index });
     },
     onVisible(visible) {
-      if (visible) this.userInfo();
+      // 只在下拉菜单打开时加载用户信息，避免不必要的请求
+      if (visible) {
+        this.userInfo();
+      }
     },
     uploadSelect(obj) {
       this.$refs.uploader.uploadSelect(obj);

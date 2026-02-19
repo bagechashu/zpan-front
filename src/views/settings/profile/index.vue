@@ -54,9 +54,20 @@ export default {
   },
   methods: {
     loadInfo() {
-      this.$zpan.User.profileGet().then((ret) => {
-        this.user = ret.data;
-        this.profile = ret.data.profile;
+      // 优先从 store 获取用户信息
+      if (this.$store.state.userProfile) {
+        this.user = this.$store.state.userProfile;
+        this.profile = this.$store.state.userProfile.profile;
+        return;
+      }
+
+      // 如果 store 中没有，则请求 API
+      this.$store.dispatch('fetchUserProfile').then((userProfile) => {
+        this.user = userProfile;
+        this.profile = userProfile.profile;
+      }).catch((err) => {
+        console.error('Failed to fetch user profile:', err);
+        this.$message.error('获取用户信息失败');
       });
     },
     submitForm(name) {
@@ -70,7 +81,10 @@ export default {
             type: "success",
             message: "保存成功!",
           });
-          this.loadInfo();
+          // 保存后重新刷新 store 中的用户信息
+          this.$store.dispatch('fetchUserProfile').then(() => {
+            this.loadInfo();
+          });
         });
       });
     },

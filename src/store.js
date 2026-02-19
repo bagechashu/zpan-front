@@ -1,15 +1,32 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Cookie from 'js-cookie'
+import zSystem from './libs/zpan/system'
+import zUser from './libs/zpan/user'
 
 Vue.use(Vuex)
+
+// 创建 API 服务实例
+const systemService = new zSystem()
+const userService = new zUser()
 
 export default new Vuex.Store({
   state: {
     token: null,
     user: null,
     storages: [],
-    cs: {}
+    cs: {},
+    // 系统配置
+    coreSite: {
+      name: 'ZPan',
+      intro: 'ZPan is a simple and efficient private cloud storage system.',
+      locale: 'en',
+      invite_required: true
+    },
+    // 完整的用户信息（包括 profile 和 storage）
+    userProfile: null,
+    // 标记是否已加载站点配置
+    coreSiteLoaded: false
   },
   mutations: {
     setToken(state, token) {
@@ -29,6 +46,15 @@ export default new Vuex.Store({
     },
     cs(state, cs) {
       state.cs = cs
+    },
+    // 设置站点配置
+    setCoreSite(state, coreSite) {
+      state.coreSite = coreSite
+      state.coreSiteLoaded = true
+    },
+    // 设置完整的用户信息
+    setUserProfile(state, userProfile) {
+      state.userProfile = userProfile
     }
   },
   actions: {
@@ -50,11 +76,49 @@ export default new Vuex.Store({
     removeToken({ commit }) {
       commit('clearToken')
       commit('clearUser')
+      commit('setUserProfile', null)
       Cookie.remove('z-token')
     },
     // 设置用户信息
     setUser({ commit }, user) {
       commit('setUser', user)
+    },
+    // 获取并设置站点配置
+    async fetchCoreSite({ commit, state }) {
+      // 如果已加载过，直接返回
+      if (state.coreSiteLoaded) {
+        return state.coreSite
+      }
+      try {
+        const response = await systemService.optGet('core.site')
+        // system.js 的 optGet 方法已经通过 axios 响应拦截器返回了数据
+        if (response && response.data) {
+          commit('setCoreSite', response.data)
+          return response.data
+        }
+      } catch (error) {
+        console.error('Failed to fetch core site config:', error)
+        // 失败时返回默认值
+        return state.coreSite
+      }
+    },
+    // 获取并设置用户完整信息
+    async fetchUserProfile({ commit }) {
+      try {
+        const response = await userService.profileGet()
+        // user.js 的 profileGet 方法已经通过 axios 响应拦截器返回了数据
+        if (response && response.data) {
+          commit('setUserProfile', response.data)
+          return response.data
+        }
+      } catch (error) {
+        console.error('Failed to fetch user profile:', error)
+        throw error
+      }
+    },
+    // 清除用户信息缓存
+    clearUserProfile({ commit }) {
+      commit('setUserProfile', null)
     }
   }
 })

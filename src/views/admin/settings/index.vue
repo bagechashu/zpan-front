@@ -37,19 +37,28 @@ export default {
   },
   methods: {
     refresh() {
-      this.$zpan.System.optGet("core.site").then((ret) => {
-        if (ret.data) {
-          this.form = ret.data;
-        }
+      // 优先从 store 获取配置
+      if (this.$store.state.coreSiteLoaded && this.$store.state.coreSite) {
+        this.form = { ...this.$store.state.coreSite };
+        return;
+      }
+
+      // 如果 store 中没有，则请求 API，并更新 store
+      this.$store.dispatch('fetchCoreSite').then((coreSite) => {
+        this.form = { ...coreSite };
+      }).catch((err) => {
+        console.error('Failed to fetch core site config:', err);
       });
     },
     onSubmit() {
       this.$zpan.System.optSave("core.site", this.form).then((ret) => {
-        this.refresh();
+        // 保存后更新 store 中的配置
+        this.$store.commit('setCoreSite', this.form);
         this.$message({
           type: "success",
           message: this.$t("msg.save-success"),
         });
+        this.refresh();
       });
     },
   },

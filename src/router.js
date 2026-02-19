@@ -61,32 +61,49 @@ let router = new Router({
 })
 
 const setTitle = (title, next) => {
-  Vue.zpan.System.optGet("core.site").then(ret => {
-    let sOpt = ret.data
-    let fullTitle = sOpt.name
-    if (title) {
-      fullTitle += `- ${title}`
-    }
-    window.document.title = fullTitle;
-    // Only set locale if it's a valid loaded locale
-    if (sOpt.locale && ['en', 'zh-CN'].includes(sOpt.locale)) {
-      i18n.locale = sOpt.locale
-    }
-  }).catch(error => {
-    // 忽略认证失败（401/403）的错误，这在未登录时是正常的
-    if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-      // 设置默认标题
-      window.document.title = document.title || 'ZPAN';
-      return;
-    }
-    
-    if (error.response && error.response.status == 520) {
-      next({ name: "installer" })
-      return
-    }
-    // If API fails, set a default title
-    window.document.title = document.title || 'ZPAN';
-  });
+  // 从 store 中获取站点配置，如果未加载则触发加载
+  let coreSite = store.state.coreSite
+  
+  if (!store.state.coreSiteLoaded) {
+    // 首次需要加载配置
+    store.dispatch('fetchCoreSite').then(site => {
+      applyTitle(site, title)
+    }).catch(error => {
+      handleTitleError(error)
+    })
+  } else {
+    // 使用已加载的配置
+    applyTitle(coreSite, title)
+  }
+}
+
+const applyTitle = (coreSite, title) => {
+  let fullTitle = coreSite.name
+  if (title) {
+    fullTitle += `- ${title}`
+  }
+  window.document.title = fullTitle
+  
+  // Only set locale if it's a valid loaded locale
+  if (coreSite.locale && ['en', 'zh-CN'].includes(coreSite.locale)) {
+    i18n.locale = coreSite.locale
+  }
+}
+
+const handleTitleError = (error) => {
+  // 忽略认证失败（401/403）的错误，这在未登录时是正常的
+  if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+    window.document.title = document.title || 'ZPAN'
+    return
+  }
+  
+  if (error.response && error.response.status === 520) {
+    router.push({ name: "installer" })
+    return
+  }
+  
+  // If API fails, set a default title
+  window.document.title = document.title || 'ZPAN'
 }
 
 router.beforeEach((to, from, next) => {
