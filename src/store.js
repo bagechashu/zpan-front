@@ -79,8 +79,15 @@ export default new Vuex.Store({
       commit('setUserProfile', null)
       Cookie.remove('z-token')
     },
-    // 设置用户信息
+    // 设置用户信息（处理 roles 的转换）
     setUser({ commit }, user) {
+      // 确保 roles 是数组格式
+      if (user && user.roles) {
+        if (typeof user.roles === 'string') {
+          // 如果 roles 是字符串，转换为数组
+          user.roles = user.roles.split(',').map(role => role.trim())
+        }
+      }
       commit('setUser', user)
     },
     // 获取并设置站点配置

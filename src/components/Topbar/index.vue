@@ -94,9 +94,26 @@ export default {
     },
     showAdmin() {
       // 优先从 Vuex store 获取用户角色信息
-      if (this.$store.state.user && this.$store.state.user.roles) {
-        return this.$store.state.user.roles.includes('admin');
+      const user = this.$store.state.user;
+      if (!user) {
+        return false;
       }
+
+      let roles = user.roles;
+      if (!roles) {
+        return false;
+      }
+
+      // 处理 roles 是字符串或数组的情况
+      if (typeof roles === 'string') {
+        return roles === 'admin' || roles.split(',').some(role => role.trim() === 'admin');
+      }
+
+      if (Array.isArray(roles)) {
+        return roles.includes('admin');
+      }
+
+      return false;
     },
     menuActive() {
       return `/${this.$route.params.sname}`;
@@ -131,11 +148,17 @@ export default {
           this.$i18n.locale = this.profile.locale;
         }
 
+        // 处理 roles：转换为数组格式
+        let roles = this.user.roles || this.user.role;
+        if (typeof roles === 'string') {
+          roles = roles.split(',').map(role => role.trim());
+        }
+
         // 保存用户信息到 Vuex store（简要信息）
         this.$store.dispatch('setUser', {
           uid: this.user.id,
           username: this.user.username,
-          roles: this.user.roles || this.user.role
+          roles: roles
         });
 
         this.updateStorage();
