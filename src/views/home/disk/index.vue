@@ -291,6 +291,10 @@ export default {
   mounted() {
     this.query.type = this.$route.query.type;
     this.folderBtnShown = !this.query.type;
+    // 监听文件列表刷新事件（如上传完成后）
+    this.$root.$on("file-list-refresh", () => {
+      this.listRefresh();
+    });
   },
 };
 </script>

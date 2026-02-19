@@ -133,6 +133,8 @@ export default {
           console.log("status", newFile.xhr.status);
           this.$zpan.File.uploadDone(oldFile.matter.alias).then((ret) => {
             this.uploadedCnt++;
+            // 发送上传完成事件，通知文件列表刷新
+            this.$emit("upload-completed");
           });
         }
         return;

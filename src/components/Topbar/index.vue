@@ -250,6 +250,10 @@ export default {
   mounted() {
     if (this.logined) {
       this.userInfo();
+      // 监听上传完成事件，刷新文件列表
+      this.$refs.uploader.$on("upload-completed", () => {
+        this.$root.$emit("file-list-refresh");
+      });
     }
   },
 };
