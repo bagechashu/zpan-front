@@ -45,11 +45,27 @@ export default {
 
       // 如果访问的是首页则自动跳去第一个存储空间
       if (to.path == "/") {
-        router.push({ path: `/${storages[0].name}` });
+        next({ path: `/${storages[0].name}` });
         return;
       }
 
+      // 验证访问的 sname 是否有效
+      // 如果不是首页且不是有效的存储名称，显示 404
+      if (to.params.sname) {
+        const validStorageNames = storages.map(s => s.name);
+        if (!validStorageNames.includes(to.params.sname)) {
+          console.warn(`Invalid storage name: ${to.params.sname}`);
+          next({ name: 'notfound' });
+          return;
+        }
+      }
+
       store.commit("storages", storages);
+      next();
+    }).catch((err) => {
+      // API 调用失败时也记录日志
+      console.error('Failed to fetch storage list:', err);
+      // 允许继续导航，让组件处理错误
       next();
     });
   },

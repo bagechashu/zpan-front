@@ -11,8 +11,13 @@ export default {
   computed: {},
   methods: {},
   mounted() {
-    // 初始化 token：从 cookie 恢复到 Vuex store
-    this.$store.dispatch('initToken');
+    // 检查用户认证状态：向服务器验证用户是否已登录
+    // HttpOnly Cookie 由浏览器自动管理和发送
+    this.$store.dispatch('checkAuth').then(() => {
+      console.log(`[App] Auth check complete. authenticated: ${this.$store.state.authStatus.authenticated}`);
+    }).catch((error) => {
+      console.debug('[App] Auth check failed:', error.message);
+    });
     
     // 初始化站点配置：预加载 core.site
     this.$store.dispatch('fetchCoreSite').catch((error) => {

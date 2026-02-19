@@ -147,7 +147,7 @@ export default {
           }
         }).catch((error) => {
           loading.close();
-          const errMsg = (error.response && error.response.data && error.response.data.message) || error.message;
+          const errMsg = (error.response && error.response.data && error.response.data.msg) || error.message || '扫描失败';
           this.$message({
             type: "error",
             message: "扫描失败：" + errMsg,

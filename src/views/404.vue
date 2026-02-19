@@ -2,7 +2,7 @@
   <div>
     <Topbar />
     <el-empty description="页面不存在">
-      <el-button type="primary" @click="$router.go(-1)">返回首页</el-button>
+      <el-button type="primary" @click="$router.push({ path: '/' })">返回首页</el-button>
     </el-empty>
   </div>
 </template>

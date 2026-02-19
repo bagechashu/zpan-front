@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import Cookie from 'js-cookie'
 import zSystem from './libs/zpan/system'
 import zUser from './libs/zpan/user'
 
@@ -12,7 +11,11 @@ const userService = new zUser()
 
 export default new Vuex.Store({
   state: {
-    token: null,
+    // 认证状态：通过后端验证确认，HttpOnly Cookie 由服务器管理
+    authStatus: {
+      checked: false,      // 是否已检查过
+      authenticated: false // 是否已认证
+    },
     user: null,
     storages: [],
     cs: {},
@@ -29,11 +32,13 @@ export default new Vuex.Store({
     coreSiteLoaded: false
   },
   mutations: {
-    setToken(state, token) {
-      state.token = token
-    },
-    clearToken(state) {
-      state.token = null
+    setAuthStatus(state, { checked, authenticated }) {
+      if (checked !== undefined) {
+        state.authStatus.checked = checked
+      }
+      if (authenticated !== undefined) {
+        state.authStatus.authenticated = authenticated
+      }
     },
     setUser(state, user) {
       state.user = user
@@ -58,38 +63,62 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    // 初始化 token：从 cookie 中恢复 token 到 state
-    initToken({ state, commit }) {
-      if (!state.token) {
-        const tokenFromCookie = Cookie.get('z-token')
-        if (tokenFromCookie) {
-          commit('setToken', tokenFromCookie)
+    // 验证用户认证状态：向服务器发送请求确认用户是否已登录
+    // HttpOnly Cookie 由浏览器自动管理，无需 JS 操作
+    async checkAuth({ commit }) {
+      try {
+        const response = await userService.profileGet()
+        console.log("[checkAuth] profileGet response:", response);
+        // axios 拦截器已经返回了 response.data，所以 response 是 {code: 0, msg: 'ok', data: {...}}
+        if (response && response.code === 0 && response.data) {
+          const userData = response.data;
+          console.log("[checkAuth] userData:", userData);
+          // 用户已认证
+          commit('setAuthStatus', { authenticated: true })
+          commit('setUserProfile', userData)
+          if (userData && userData.id) {
+            // 处理 roles：确保保存正确的格式
+            let roles = userData.roles;
+            console.log("[checkAuth] Original roles:", roles);
+            if (typeof roles === 'string' && roles) {
+              // 如果是字符串，分割并处理
+              roles = roles.split(',').map(role => role.trim()).filter(role => role)
+            }
+            if (!Array.isArray(roles)) {
+              roles = []
+            }
+            console.log("[checkAuth] Converted roles:", roles);
+            commit('setUser', {
+              uid: userData.id,
+              username: userData.username,
+              roles: roles
+            })
+          }
         }
+      } catch (error) {
+        // 认证失败（比如 401 响应）
+        console.error("[checkAuth] Auth failed:", error);
+        commit('setAuthStatus', { authenticated: false })
+        commit('clearUser')
+        commit('setUserProfile', null)
+      } finally {
+        commit('setAuthStatus', { checked: true })
       }
     },
-    // 设置 token：同时保存到 state 和 cookie
-    saveToken({ commit }, token) {
-      commit('setToken', token)
-      Cookie.set('z-token', token, { path: '/' })
-    },
-    // 清除 token：同时清除 state 和 cookie
-    removeToken({ commit }) {
-      commit('clearToken')
+    // 登出：清除所有认证相关数据
+    async logout({ commit }) {
+      try {
+        await userService.signout()
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Logout error:', error)
+      }
+      commit('setAuthStatus', { authenticated: false, checked: false })
       commit('clearUser')
       commit('setUserProfile', null)
-      Cookie.remove('z-token')
+      // HttpOnly Cookie 由服务器通过响应清除
     },
-    // 设置用户信息（处理 roles 的转换）
-    setUser({ commit }, user) {
-      // 确保 roles 是数组格式
-      if (user && user.roles) {
-        if (typeof user.roles === 'string') {
-          // 如果 roles 是字符串，转换为数组
-          user.roles = user.roles.split(',').map(role => role.trim())
-        }
-      }
-      commit('setUser', user)
-    },
+
     // 获取并设置站点配置
     async fetchCoreSite({ commit, state }) {
       // 如果已加载过，直接返回
@@ -114,6 +143,7 @@ export default new Vuex.Store({
     async fetchUserProfile({ commit }) {
       try {
         const response = await userService.profileGet()
+        console.log("[fetchUserProfile] response:", response);
         // user.js 的 profileGet 方法已经通过 axios 响应拦截器返回了数据
         if (response && response.data) {
           commit('setUserProfile', response.data)

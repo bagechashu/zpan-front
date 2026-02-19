@@ -63,16 +63,16 @@ export default {
 
         this.$zpan.User.signin(this.formItem)
           .then((ret) => {
-            // 将 token 和 用户信息保存到 Vuex store 和 cookie
-            if (ret && ret.token) {
-              this.$store.dispatch('saveToken', ret.token);
-              // 保存用户信息（包含角色等）
+            // 保存用户信息（HttpOnly Cookie 由服务器自动管理，无需前端操作）
+            if (ret && ret.uid) {
               const user = {
                 uid: ret.uid,
                 username: ret.username,
                 roles: ret.roles
               };
               this.$store.dispatch('setUser', user);
+              // 标记为已登录（放在 store 中）
+              this.$store.commit('setAuthStatus', { authenticated: true });
               
               // 登录成功后，异步获取完整用户信息到 store，然后重定向
               this.$store.dispatch('fetchUserProfile').then(() => {
