@@ -131,7 +131,6 @@ export default {
         default:
           break;
       }
-      console.log(command);
     },
     onEditStorage(row) {
       let form = Object.assign({}, row.storage);

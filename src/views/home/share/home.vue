@@ -184,7 +184,6 @@ export default {
           }
         })
         .catch((err) => {
-          console.log(12, err);
         });
     },
   },

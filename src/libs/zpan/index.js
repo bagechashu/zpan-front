@@ -3,7 +3,6 @@ import zUser from './user'
 import zUserKey from './userKey'
 import zStorage from './storage'
 import zFile from './matter'
-// import zFolder from './folder'
 import zShare from './share'
 import zRecyclebin from './recyclebin'
 
@@ -23,7 +22,6 @@ export default {
     UserKey,
     Storage,
     File,
-    // Folder,
     Share,
     Recyclebin
 }

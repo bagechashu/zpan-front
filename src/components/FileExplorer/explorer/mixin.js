@@ -35,7 +35,6 @@ const mixin = {
 
         },
         type2icon(type) {
-            console.log(type)
             let [t1, t2] = type.split('/')
             let mt = ['pdf', 'html', 'xml', 'psd', 'rtf']
             if (mt.includes(t2)) {

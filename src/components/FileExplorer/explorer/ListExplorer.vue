@@ -31,13 +31,13 @@
         </div>
       </template>
     </el-table-column>
-    <el-table-column prop="size" :label="$t('fth.size')" width="180">
+    <el-table-column prop="size" :label="$t('fth.size')" width="180" sortable>
       <template slot-scope="scope">
         <div v-if="scope.row.dirtype">-</div>
         <div v-else>{{ scope.row.size }}</div>
       </template>
     </el-table-column>
-    <el-table-column prop="updated" :label="$t('fth.updated')" width="180">
+    <el-table-column prop="updated" :label="$t('fth.updated')" width="180" sortable>
       <template slot-scope="scope">{{ scope.row.updated | moment }}</template>
     </el-table-column>
   </el-table>

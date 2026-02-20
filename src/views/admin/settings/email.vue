@@ -48,7 +48,6 @@ export default {
   },
   mounted() {
     this.$zpan.System.optGet("core.email").then((ret) => {
-      console.log(ret.data);
       if (ret.data) {
         this.form = ret.data;
       }

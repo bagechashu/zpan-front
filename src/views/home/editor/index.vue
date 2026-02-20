@@ -18,7 +18,6 @@ export default {
   },
   methods: {
     onImageUpload(event, insertImage, files) {
-      console.log(event, insertImage, files);
       let abort;
       const cancel = (c) => {
         abort = c;
@@ -35,7 +34,6 @@ export default {
       });
     },
     onSave(text, html) {
-      console.log(text);
       let file = new File([text], this.fileinfo.name, { type: this.fileinfo.type });
       this.$zpan.File.save(this.fileinfo.alias, file).then(() => {
         this.$message.success({ message: `保存成功`, offset: 40 });

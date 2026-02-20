@@ -92,7 +92,6 @@ export default {
     },
     onScrollEnd() {
       if (this.total != 0 && this.rows.length == this.total) {
-        console.log("no more");
         return;
       }
 

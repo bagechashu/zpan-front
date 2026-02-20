@@ -118,13 +118,10 @@ export default {
     },
     submitForm(formName) {
       this.$refs[formName].validate((valid) => {
-        console.log(valid)
         if (!valid) {
-          console.log("error submit!!");
           return;
         }
 
-        console.log(this.form);
         this.$zpan.System.installDatabase(this.form.database).then((ret) => {
           setTimeout(() => {
             this.$zpan.System.createAdministrator(this.form.administrator).then(() => {

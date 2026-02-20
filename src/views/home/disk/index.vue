@@ -283,7 +283,6 @@ export default {
           })
           .catch((err) => {
             loading.close();
-            console.log(err);
           });
       });
     },
@@ -292,9 +291,18 @@ export default {
     this.query.type = this.$route.query.type;
     this.folderBtnShown = !this.query.type;
     // 监听文件列表刷新事件（如上传完成后）
-    this.$root.$on("file-list-refresh", () => {
-      this.listRefresh();
-    });
+    this._fileListRefreshHandler = () => {
+      if (this && typeof this.listRefresh === 'function') {
+        this.listRefresh();
+      }
+    };
+    this.$root.$on("file-list-refresh", this._fileListRefreshHandler);
+  },
+  beforeDestroy() {
+    // Clean up event listener to avoid memory leaks
+    if (this._fileListRefreshHandler) {
+      this.$root.$off("file-list-refresh", this._fileListRefreshHandler);
+    }
   },
 };
 </script>

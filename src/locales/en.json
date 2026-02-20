@@ -15,7 +15,10 @@
     "delete": "Delete",
     "batch-delete": "Batch Delete",
     "create-folder": "New Folder",
-    "create-file": "New File"
+    "create-file": "New File",
+    "start-upload": "Start Upload",
+    "skip": "Skip",
+    "download": "Download"
   },
   "msg": {
     "success": "Success",
@@ -30,7 +33,12 @@
     "save-success": "Saved!",
     "clean-success": "Cleaned!",
     "recovery-success": "Recoveried!",
-    "signout-success": "Signed out successfully, see you next time~"
+    "signout-success": "Signed out successfully, see you next time~",
+    "upload-success": "{name} uploaded successfully",
+    "upload-failed": "{name} upload failed",
+    "upload-done-failed": "{name} uploaded but mark failed",
+    "create-failed": "{name} creation failed, please retry",
+    "duplicate-file": "Cannot upload file with the same name, please rename it or delete the existing file and try again"
   },
   "dialog": {
     "moveto-title": "MoveTo",
@@ -44,7 +52,8 @@
     "upload-click": "click to upload",
     "upload-tips": "Drag the file here, or",
     "upload-title": "Upload Queue",
-    "upload-placeholder": "Please select"
+    "upload-placeholder": "Please select",
+    "folder-preview-title": "Confirm Folder Upload"
   },
   "disk": {
     "delete": "Delete",
@@ -117,6 +126,7 @@
     "recyclebin": "Tip: The recycle bin also occupies the network disk space, please clean it up in time~",
     "deleting": "Deleting...",
     "cleaning": "Cleaning...",
+    "uploading-cancel": "File upload in progress, cancel will terminate the upload, do you want to continue?",
     "share-cancel": "After canceling the sharing, this sharing record will be deleted and your friends will no longer be able to access this sharing link. Are you sure you want to cancel the sharing?",
     "recovery": "Are you sure you want to recover the selected file(s)?",
     "delete": "Deleted files cannot be recovered, are you sure you want to permanently delete the selected file(s)?",
@@ -124,7 +134,24 @@
     "disable": "After being disabled, it will no longer be usable. Do you want to continue?",
     "enable": "Confirm activation?",
     "secret-reset": "After resetting, the old key will no longer be usable. Do you want to continue?",
-    "secret-init": "You haven't enabled developer privileges yet. Would you like to do so?"
+    "secret-init": "You haven't enabled developer privileges yet. Would you like to do so?",
+    "browser-will-prompt": "Click \"Allow\" on the browser security prompt to select a folder",
+    "folder-preview-info": "This shows the contents of the folder you selected. Click \"Start Upload\" to begin uploading after confirming.",
+    "folder-name": "Folder Name",
+    "file-count": "File Count",
+    "files": "files",
+    "total-size": "Total Size",
+    "est-time": "Estimated Time",
+    "file-list": "File List",
+    "large-folder-warning": "This folder contains a large number of files. Uploading may take a long time. Please be patient.",
+    "filename": "Filename",
+    "file-size": "File Size",
+    "choose-action": "Please choose an action",
+    "skip-action": "Skip: Keep the existing file, do not upload this file",
+    "rename-action": "Rename: Upload this file with a new name",
+    "calculating": "Calculating...",
+    "file-exists": "File exists",
+    "file-skipped": "File skipped"
   },
   "topbar": {
     "netdisk": "Netdisk",
@@ -240,6 +267,9 @@
     "password-mismatch": "The passwords are not the same!",
     "email-required": "Please enter your email address",
     "email-invalid": "Please enter a valid email address"
+  },
+  "upload": {
+    "max-files-tip": "You can upload a maximum of {max} files at a time, please batch them!"
   },
   "signup": {
     "title": "User Registration",

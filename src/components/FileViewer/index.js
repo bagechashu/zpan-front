@@ -21,7 +21,7 @@ class Preview {
                 window.open(`/f/editor?alias=${obj.alias}`, '_blank')
                 break;
             default:
-                console.log(type, obj, link)
+                break;
         }
     }
 }

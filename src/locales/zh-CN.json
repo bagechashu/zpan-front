@@ -15,7 +15,10 @@
     "delete": "删除",
     "batch-delete": "批量删除",
     "create-folder": "新建文件夹",
-    "create-file": "新建文件"
+    "create-file": "新建文件",
+    "start-upload": "开始上传",
+    "skip": "跳过",
+    "download": "下载"
   },
   "msg": {
     "success": "成功",
@@ -31,7 +34,12 @@
     "clean-success": "清理成功",
     "recovery-success": "恢复成功",
     "cancel-success": "取消成功",
-    "signout-success": "登出成功，欢迎下次再来~"
+    "signout-success": "登出成功，欢迎下次再来~",
+    "upload-success": "{name} 上传成功",
+    "upload-failed": "{name} 上传失败",
+    "upload-done-failed": "{name} 上传成功但标记失败",
+    "create-failed": "{name} 创建失败，请重试",
+    "duplicate-file": "无法上传同名文件，请更换文件名或删除现有文件后重试"
   },
   "dialog": {
     "moveto-title": "移动到",
@@ -45,7 +53,8 @@
     "upload-click": "点击上传",
     "upload-tips": "将文件拖到此处，或",
     "upload-title": "上传队列",
-    "upload-placeholder": "请选择"
+    "upload-placeholder": "请选择",
+    "folder-preview-title": "确认上传文件夹"
   },
   "disk": {
     "delete": "删除",
@@ -118,6 +127,7 @@
     "recyclebin": "提示：回收站也占用网盘空间，请及时清理哦~",
     "deleting": "正在删除...",
     "cleaning": "正在清理...",
+    "uploading-cancel": "文件上传中，取消将终止上传，是否继续?",
     "share-cancel": "取消分享后，该条分享记录将被删除，好友将无法再访问此分享链接。 您确认要取消分享吗？",
     "recovery": "确认还原选中的文件？",
     "delete": "此操作将彻底删除该文件, 是否继续?",
@@ -125,7 +135,24 @@
     "disable": "禁用后将不可用，是否继续？",
     "enable": "确认启用？",
     "secret-reset": "重置后，老的秘钥将无法使用，是否继续？",
-    "secret-init": "您尚未开通开发者权限，是否开通？"
+    "secret-init": "您尚未开通开发者权限，是否开通？",
+    "browser-will-prompt": "请在浏览器安全提示中点击\"允许\"以选择文件夹",
+    "folder-preview-info": "这里显示您选择的文件夹内容。请确认无误后点击\"开始上传\"开始上传。",
+    "folder-name": "文件夹名称",
+    "file-count": "文件数量",
+    "files": "个文件",
+    "total-size": "总大小",
+    "est-time": "预计时间",
+    "file-list": "文件列表",
+    "large-folder-warning": "此文件夹包含大量文件，上传可能需要较长时间，请耐心等待。",
+    "filename": "文件名",
+    "file-size": "文件大小",
+    "choose-action": "请选择操作方式",
+    "skip-action": "跳过：保留现有文件，不上传此文件",
+    "rename-action": "重命名：以新名称上传此文件",
+    "calculating": "计算中...",
+    "file-exists": "文件已存在",
+    "file-skipped": "文件已跳过"
   },
   "topbar": {
     "netdisk": "网盘",
@@ -241,6 +268,9 @@
     "password-mismatch": "两次输入密码不一致!",
     "email-required": "请输入邮箱地址",
     "email-invalid": "请输入正确的邮箱地址"
+  },
+  "upload": {
+    "max-files-tip": "每次最多允许 {max} 个文件同时上传，请分批操作！"
   },
   "signup": {
     "title": "用户注册",

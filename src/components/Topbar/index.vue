@@ -92,47 +92,20 @@ export default {
       return this.menus && this.menus.length > 0;
     },
     showAdmin() {
-      // 优先从 Vuex store 获取用户角色信息
       const user = this.$store.state.user;
-      console.log("[showAdmin] store.state.user:", user); // 调试：查看 store 中的 user 对象
-      console.log("[showAdmin] userProfile:", this.$store.state.userProfile); // 调试：查看 userProfile
-      
-      if (!user) {
-        console.log("[showAdmin] user is null or undefined");
+      if (!user || !user.roles) {
         return false;
       }
-      
-      if (!user.roles) {
-        console.log("[showAdmin] user.roles is empty");
-        return false;
-      }
-
       const roles = user.roles;
-      console.log("[showAdmin] User roles:", roles, "Type:", typeof roles); // 调试输出用户角色信息
-      
-      // 处理 roles 是数组的情况
       if (Array.isArray(roles)) {
-        console.log("[showAdmin] roles is array, length:", roles.length);
         return roles.some(role => {
-          // 处理数组元素可能是对象或字符串的情况
           const roleStr = typeof role === 'string' ? role : role.name || role.title || '';
           return roleStr.trim().toLowerCase() === 'admin';
         });
       }
-      // 处理 roles 是字符串的情况（后端返回的格式可能是 "admin" 或 "admin,user" 或多个角色）
       if (typeof roles === 'string') {
-        console.log("[showAdmin] roles is string");
-        // 处理空字符串的情况
-        if (!roles || roles.trim() === '') {
-          console.log("[showAdmin] roles is empty string");
-          return false;
-        }
-        // 分割字符串并检查是否包含 'admin'
-        const result = roles.split(',').some(role => role.trim().toLowerCase() === 'admin');
-        console.log("[showAdmin] string check result:", result);
-        return result;
+        return roles.split(',').some(role => role.trim().toLowerCase() === 'admin');
       }
-      console.log("[showAdmin] roles type not recognized");
       return false;
     },
     menuActive() {
@@ -143,21 +116,15 @@ export default {
     onUTotalChange(uTotal) {
       this.ulistTotal = uTotal;
     },
-    // 从 store 获取或请求用户信息
     userInfo() {
-      console.log("[userInfo] called, userProfile in store:", this.$store.state.userProfile);
-      // 优先从 store 中获取用户完整信息
       if (this.$store.state.userProfile) {
-        console.log("[userInfo] using userProfile from store");
         this.user = this.$store.state.userProfile;
         this.profile = this.user.profile;
         if (this.profile.avatar == "") {
           this.profile.avatar = defaultAvatar;
         }
         
-        // 确保 store 中的 user 对象有正确的 roles 格式
         if (!this.$store.state.user || !this.$store.state.user.roles || !Array.isArray(this.$store.state.user.roles)) {
-          console.log("[userInfo] Converting roles to array format");
           let roles = this.user.roles;
           if (typeof roles === 'string' && roles) {
             roles = roles.split(',').map(role => role.trim()).filter(role => role);
@@ -165,7 +132,6 @@ export default {
           if (!Array.isArray(roles)) {
             roles = [];
           }
-          console.log("[userInfo] Setting user with converted roles:", roles);
           this.$store.commit('setUser', {
             uid: this.user.id,
             username: this.user.username,
@@ -176,11 +142,7 @@ export default {
         this.updateStorage();
         return;
       }
-
-      // 如果 store 中没有，则请求
-      console.log("[userInfo] Fetching user profile from server");
       this.$store.dispatch('fetchUserProfile').then((userProfile) => {
-        console.log("[userInfo] fetchUserProfile response:", userProfile);
         this.user = userProfile;
         this.profile = this.user.profile;
         if (this.profile.avatar == "") {
@@ -191,17 +153,13 @@ export default {
           this.$i18n.locale = this.profile.locale;
         }
 
-        // 处理 roles：转换为数组格式并确保一致性
         let roles = this.user.roles || this.user.role;
-        console.log("[userInfo] Original roles from server:", roles);
         if (typeof roles === 'string' && roles) {
           roles = roles.split(',').map(role => role.trim()).filter(role => role);
         }
         if (!Array.isArray(roles)) {
           roles = [];
         }
-
-        console.log("[userInfo] Converted roles to array:", roles);
         // 保存用户信息到 Vuex store（简要信息）
         this.$store.commit('setUser', {
           uid: this.user.id,
@@ -230,13 +188,16 @@ export default {
       this.$router.push({ name: index });
     },
     onVisible(visible) {
-      // 只在下拉菜单打开时加载用户信息，避免不必要的请求
-      console.log("[onVisible] visible:", visible);
       if (visible) {
         this.userInfo();
       }
     },
     uploadSelect(obj) {
+      // 立即打开上传状态弹窗，不要等到上传结束
+      this.$nextTick(() => {
+        this.$refs.ulist.doShow();
+      });
+      // 然后触发文件选择
       this.$refs.uploader.uploadSelect(obj);
     },
     AplayerOpen(obj, link) {
@@ -251,9 +212,22 @@ export default {
     if (this.logined) {
       this.userInfo();
       // 监听上传完成事件，刷新文件列表
-      this.$refs.uploader.$on("upload-completed", () => {
-        this.$root.$emit("file-list-refresh");
-      });
+      if (this.$refs.uploader) {
+        this._uploadCompletedHandler = () => {
+          try {
+            this.$root.$emit("file-list-refresh");
+          } catch (err) {
+            console.error("Error emitting file-list-refresh:", err);
+          }
+        };
+        this.$refs.uploader.$on("upload-completed", this._uploadCompletedHandler);
+      }
+    }
+  },
+  beforeDestroy() {
+    // Clean up event listeners
+    if (this._uploadCompletedHandler && this.$refs.uploader) {
+      this.$refs.uploader.$off("upload-completed", this._uploadCompletedHandler);
     }
   },
 };

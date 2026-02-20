@@ -35,7 +35,6 @@ export default {
     },
     onClose() {
       this.$emit("close");
-      console.log(this.player);
       this.player.stop();
     },
   },

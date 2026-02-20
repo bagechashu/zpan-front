@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 import axios from "axios";
 import zpanAxios from './zpan/axios';
 

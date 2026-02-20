@@ -86,7 +86,7 @@ export default {
             }
           })
           .catch((err) => {
-            console.log(err.response);
+
             // todo 判断如果账户未激活则提示是否重发邮件，调用重发邮件接口帮助用户重新激活账户
           });
       });

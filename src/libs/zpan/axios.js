@@ -42,7 +42,7 @@ _axios.interceptors.response.use(
                 case 401: {
                     store.dispatch('logout');
 
-                    let msg = data && data.msg ? data.msg : '认证失效, 请重新登录';
+                    let msg = data && data.msg ? data.msg : 'Authentication expired, please log in again';
                     Notification.error(msg);
 
                     return Promise.reject("invalid login status");
@@ -51,7 +51,7 @@ _axios.interceptors.response.use(
                 // 处理权限不足 (403)
                 case 403: {
                     // 仅显示通知，不重定向，由业务层决定如何处理
-                    let msg = data && data.msg ? data.msg : '权限不足';
+                    let msg = data && data.msg ? data.msg : 'Permission denied';
                     Notification.error(msg);
 
                     return Promise.reject("access denied");
@@ -64,7 +64,7 @@ _axios.interceptors.response.use(
 
                 // 其他错误状态码直接返回
                 default: {
-                    let msg = data && data.msg ? data.msg : '权限不足';
+                    let msg = data && data.msg ? data.msg : 'Permission denied or server error';
                     Notification.error(msg);
 
                     return Promise.reject(error);

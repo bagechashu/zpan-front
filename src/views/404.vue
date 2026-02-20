@@ -10,10 +10,7 @@
 <script>
 import Topbar from "@/components/Topbar";
 export default {
-  components: { Topbar },
-  mounted() {
-    console.log(this.$route);
-  },
+  components: { Topbar }
 };
 </script>
 

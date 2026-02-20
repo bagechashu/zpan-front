@@ -68,26 +68,18 @@ export default new Vuex.Store({
     async checkAuth({ commit }) {
       try {
         const response = await userService.profileGet()
-        console.log("[checkAuth] profileGet response:", response);
-        // axios 拦截器已经返回了 response.data，所以 response 是 {code: 0, msg: 'ok', data: {...}}
         if (response && response.code === 0 && response.data) {
           const userData = response.data;
-          console.log("[checkAuth] userData:", userData);
-          // 用户已认证
           commit('setAuthStatus', { authenticated: true })
           commit('setUserProfile', userData)
           if (userData && userData.id) {
-            // 处理 roles：确保保存正确的格式
             let roles = userData.roles;
-            console.log("[checkAuth] Original roles:", roles);
             if (typeof roles === 'string' && roles) {
-              // 如果是字符串，分割并处理
               roles = roles.split(',').map(role => role.trim()).filter(role => role)
             }
             if (!Array.isArray(roles)) {
               roles = []
             }
-            console.log("[checkAuth] Converted roles:", roles);
             commit('setUser', {
               uid: userData.id,
               username: userData.username,
@@ -96,8 +88,6 @@ export default new Vuex.Store({
           }
         }
       } catch (error) {
-        // 认证失败（比如 401 响应）
-        console.error("[checkAuth] Auth failed:", error);
         commit('setAuthStatus', { authenticated: false })
         commit('clearUser')
         commit('setUserProfile', null)

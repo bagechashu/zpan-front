@@ -11,12 +11,8 @@ export default {
   computed: {},
   methods: {},
   mounted() {
-    // 检查用户认证状态：向服务器验证用户是否已登录
-    // HttpOnly Cookie 由浏览器自动管理和发送
-    this.$store.dispatch('checkAuth').then(() => {
-      console.log(`[App] Auth check complete. authenticated: ${this.$store.state.authStatus.authenticated}`);
-    }).catch((error) => {
-      console.debug('[App] Auth check failed:', error.message);
+    this.$store.dispatch('checkAuth').catch(() => {
+      // Auth check failed, redirect will be handled by router
     });
     
     // 初始化站点配置：预加载 core.site
