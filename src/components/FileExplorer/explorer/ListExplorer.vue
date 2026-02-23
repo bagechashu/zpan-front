@@ -31,13 +31,13 @@
         </div>
       </template>
     </el-table-column>
-    <el-table-column prop="size" :label="$t('fth.size')" width="180" sortable>
+    <el-table-column prop="size" :label="$t('fth.size')" width="120" show-overflow-tooltip sortable>
       <template slot-scope="scope">
         <div v-if="scope.row.dirtype">-</div>
         <div v-else>{{ scope.row.size }}</div>
       </template>
     </el-table-column>
-    <el-table-column prop="uploader" :label="$t('fth.uploader')" width="120" show-overflow-tooltip sortable>
+    <el-table-column prop="uploader" :label="$t('fth.uploader')" width="180" show-overflow-tooltip sortable>
       <template slot-scope="scope">
         {{ scope.row.uploader && scope.row.uploader.username ? scope.row.uploader.username : '-' }}
       </template>
