@@ -37,7 +37,7 @@
         <div v-else>{{ scope.row.size }}</div>
       </template>
     </el-table-column>
-    <el-table-column prop="uploader" :label="$t('fth.uploader')" width="120" show-overflow-tooltip>
+    <el-table-column prop="uploader" :label="$t('fth.uploader')" width="120" show-overflow-tooltip sortable>
       <template slot-scope="scope">
         {{ scope.row.uploader && scope.row.uploader.username ? scope.row.uploader.username : '-' }}
       </template>
