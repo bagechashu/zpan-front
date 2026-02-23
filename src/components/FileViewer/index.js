@@ -15,7 +15,8 @@ class Preview {
                 window.open(`/viewer/pdf?link=${encodeURIComponent(link)}&title=${obj.name}`, '_blank')
                 break;
             case "doc":
-                window.open("http://view.officeapps.live.com/op/view.aspx?src=" + encodeURIComponent(link));
+                // window.open("http://view.officeapps.live.com/op/view.aspx?src=" + encodeURIComponent(link));
+                window.open(link, '_blank')
                 break;
             case "text":
                 window.open(`/f/editor?alias=${obj.alias}`, '_blank')

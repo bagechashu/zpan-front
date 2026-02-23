@@ -133,7 +133,6 @@ export default new Vuex.Store({
     async fetchUserProfile({ commit }) {
       try {
         const response = await userService.profileGet()
-        console.log("[fetchUserProfile] response:", response);
         // user.js 的 profileGet 方法已经通过 axios 响应拦截器返回了数据
         if (response && response.data) {
           commit('setUserProfile', response.data)

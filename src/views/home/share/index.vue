@@ -71,11 +71,11 @@ export default {
       return new Date(expireAt).getFullYear() - new Date().getFullYear() > 10;
     },
     listRefresh() {
-      let host = window.location.host;
+      let origin = window.location.origin;
       this.$zpan.Share.list().then((ret) => {
         let data = ret.data;
         this.rows = data.list.map((item) => {
-          item.link = `http://${host}/s/${item.alias}`;
+          item.link = `${origin}/s/${item.alias}`;
           return item;
         });
         this.total = data.total;
