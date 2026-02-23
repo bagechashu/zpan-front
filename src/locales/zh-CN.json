@@ -82,6 +82,7 @@
   "fth": {
     "name": "名称",
     "size": "大小",
+    "uploader": "上传者",
     "updated": "最近更新"
   },
   "leftnav": {
@@ -241,7 +242,7 @@
   },
   "login": {
     "title": "用户登录",
-    "email-placeholder": "用户名或邮箱",
+    "email-placeholder": "用户名/邮箱 (LDAP不支持邮箱)",
     "password-placeholder": "密码",
     "signin-btn": "登录",
     "forgot-password": "忘记密码",

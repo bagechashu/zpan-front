@@ -81,6 +81,7 @@
   "fth": {
     "name": "Name",
     "size": "Size",
+    "uploader": "Uploader",
     "updated": "LastUpdated"
   },
   "leftnav": {
@@ -240,7 +241,7 @@
   },
   "login": {
     "title": "User Sign In",
-    "email-placeholder": "Email or username",
+    "email-placeholder": "Username/Email (LDAP no support Email)",
     "password-placeholder": "Password",
     "signin-btn": "Sign In",
     "forgot-password": "Forgot Password",
