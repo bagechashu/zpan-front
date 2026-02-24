@@ -74,7 +74,7 @@ export default {
       folderBtnShown: false,
       moreButtons: [
         { name: "move", title: this.$t("ftb.move"), action: this.move, shown: (item) => !item.dirtype },
-        // { name: "rename", title: this.$t("ftb.rename"), action: this.rename },
+        { name: "rename", title: this.$t("ftb.rename"), action: this.rename, shown: (item) => !item.dirtype },
         { name: "remove", title: this.$t("ftb.remove"), action: this.remove },
       ],
       selectedItems: [],
