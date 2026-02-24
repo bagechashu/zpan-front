@@ -23,6 +23,7 @@
   "msg": {
     "success": "成功",
     "failed": "失败",
+    "list-load-failed": "文件列表加载失败，请刷新这个页面",
     "batch-delete-success": "批量删除成功",
     "create-success": "创建成功",
     "delete-success": "删除成功",
@@ -68,7 +69,9 @@
   "ft": {
     "breadcrumb": "全部文件",
     "loaded-all": "已全部加载，共{total}个",
-    "loading": "已加载{loaded}个，共{total}个"
+    "loading": "已加载{loaded}个，共{total}个",
+    "long-loading-tip": "如果长时间没有显示，请强制刷新页面",
+    "force-refresh": "强制刷新"
   },
   "share-list": {
     "loaded-all": "已全部加载，共{total}个",

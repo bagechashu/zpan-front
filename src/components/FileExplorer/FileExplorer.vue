@@ -118,6 +118,12 @@ export default {
         }
 
         this.total = data.total;
+      }).catch(() => {
+        if (offset == 0) {
+          this.rows = [];
+          this.total = 0;
+        }
+      }).finally(() => {
         this.loading = false;
       });
     },

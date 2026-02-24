@@ -23,6 +23,7 @@
   "msg": {
     "success": "Success",
     "failed": "Failed",
+    "list-load-failed": "Failed to load file list, please refresh full page",
     "batch-delete-success": "Batch deleted!",
     "create-success": "Created!",
     "delete-success": "Deleted!",
@@ -67,7 +68,9 @@
   "ft": {
     "breadcrumb": "All files",
     "loaded-all": "All loaded, Total {total}",
-    "loading": "Loaded {loaded}, Total {total}"
+    "loading": "Loaded {loaded}, Total {total}",
+    "long-loading-tip": "If it does not appear for a long time, please force refresh the page",
+    "force-refresh": "Force Refresh"
   },
   "share-list": {
     "loaded-all": "All loaded, Total {total}",

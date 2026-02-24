@@ -114,6 +114,12 @@ export default {
         this.$zpan.File.list(this.query).then((ret) => {
           this.query.kw = "";
           resolve(ret);
+        }).catch((err) => {
+          this.$message({
+            type: "error",
+            message: this.$t("msg.list-load-failed"),
+          });
+          reject(err);
         });
       });
     },
