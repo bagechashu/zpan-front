@@ -84,5 +84,14 @@ export default {
 .el-icon-folder {
   color: #ffc402;
 }
+/* 选中节点背景色加深 */
+/* 加深当前选中节点背景色 */
+/deep/ .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+  background-color: #96CAFF !important;
+}
+
+/* 可选：鼠标 hover 也加深 */
+/deep/ .el-tree-node__content:hover {
+  background-color: #F5F7FA;
+}
 </style>
- No newline at end of file

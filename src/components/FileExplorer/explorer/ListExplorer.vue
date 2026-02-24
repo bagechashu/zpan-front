@@ -23,7 +23,7 @@
             </el-link>
 
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item v-for="item in moreButtons" :key="item.name" :command="{ action: item.action, row: scope.row }">
+              <el-dropdown-item v-for="item in moreButtons" :key="item.name" v-show="!item.shown || item.shown(scope.row)" :command="{ action: item.action, row: scope.row }">
                 {{ item.title }}
               </el-dropdown-item>
             </el-dropdown-menu>
