@@ -3,6 +3,8 @@
 </template>
 
 <script>
+import { isPublicRoute } from './router'
+
 export default {
   data() {
     return {};
@@ -11,29 +13,34 @@ export default {
   computed: {},
   methods: {},
   mounted() {
-    this.$store.dispatch('checkAuth').catch(() => {
-      // Auth check failed, redirect will be handled by router
-    });
+    this.$router.onReady(() => {
+      const currentPath = this.$route && this.$route.path ? this.$route.path : '/'
+      if (!isPublicRoute(currentPath)) {
+        this.$store.dispatch('checkAuth').catch(() => {
+          // Auth check failed, redirect will be handled by router
+        })
+      }
+    })
     
     // 初始化站点配置：预加载 core.site
     this.$store.dispatch('fetchCoreSite').catch((error) => {
       // 忽略错误，可能是安装步骤或未授权状态
-      console.debug('Failed to fetch core site config at init:', error.message);
-    });
+      console.debug('Failed to fetch core site config at init:', error.message)
+    })
     
     // setup clipboard
     this.$clipboard.on("success", (e) => {
-      this.$message.success(this.$t("msg.copy-success"));
-      e.clearSelection();
-    });
+      this.$message.success(this.$t("msg.copy-success"))
+      e.clearSelection()
+    })
     this.$clipboard.on("error", (e) => {
-      this.$message.error(this.$t("msg.copy-failed"));
-    });
+      this.$message.error(this.$t("msg.copy-failed"))
+    })
   },
   beforeDestroy() {
-    this.$clipboard.destroy();
+    this.$clipboard.destroy()
   },
-};
+}
 </script>
 
 <style>
