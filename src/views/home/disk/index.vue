@@ -13,6 +13,22 @@
   font-size: 30px;
   vertical-align: middle;
 }
+
+.view-icon {
+  width: 24px;
+  height: 24px;
+  margin-left: 10px;
+  cursor: pointer;
+  vertical-align: middle;
+  display: inline-block;
+  transition: opacity 0.3s ease;
+  color: #606266;
+  filter: invert(0.2);
+}
+
+.view-icon:hover {
+  opacity: 0.7 !important;
+}
 </style>
 
 <template>
@@ -37,8 +53,20 @@
         <el-input class="search" size="small" :placeholder="$t('topbar.search')" v-model="query.kw" @keyup.enter.native="listRefresh">
           <i slot="prefix" class="el-input__icon el-icon-search"></i>
         </el-input>
-        <i v-if="layout == 'list'" class="iconfont icon-grid" @click="layout = 'grid'"></i>
-        <i v-else class="iconfont icon-list" @click="layout = 'list'"></i>
+        <el-tooltip content="Tree View" placement="top">
+          <img v-if="layout != 'tree'" class="view-icon" src="@/assets/icon-tree.svg" alt="tree" @click="layout = 'tree'" />
+          <img v-else class="view-icon" src="@/assets/icon-tree.svg" alt="tree" @click="layout = 'list'" style="opacity: 0.5" />
+        </el-tooltip>
+        <el-tooltip content="List View" placement="top">
+          <img v-if="layout == 'tree'" class="view-icon" src="@/assets/icon-list.svg" alt="list" @click="layout = 'list'" />
+          <img v-else-if="layout == 'list'" class="view-icon" src="@/assets/icon-list.svg" alt="list" @click="layout = 'grid'" style="opacity: 0.5" />
+          <img v-else class="view-icon" src="@/assets/icon-list.svg" alt="list" @click="layout = 'list'" />
+        </el-tooltip>
+        <el-tooltip content="Grid View" placement="top">
+          <img v-if="layout == 'list'" class="view-icon" src="@/assets/icon-grid.svg" alt="grid" @click="layout = 'grid'" />
+          <img v-else-if="layout == 'grid'" class="view-icon" src="@/assets/icon-grid.svg" alt="grid" @click="layout = 'list'" style="opacity: 0.5" />
+          <img v-else class="view-icon" src="@/assets/icon-grid.svg" alt="grid" @click="layout = 'grid'" />
+        </el-tooltip>
       </div>
     </el-row>
 
@@ -70,7 +98,7 @@ export default {
         kw: "",
         dir: "",
       },
-      layout: "list",
+      layout: "tree",
       folderBtnShown: false,
       moreButtons: [
         { name: "move", title: this.$t("ftb.move"), action: this.move, shown: (item) => !item.dirtype },
@@ -303,6 +331,11 @@ export default {
       }
     };
     this.$root.$on("file-list-refresh", this._fileListRefreshHandler);
+    
+    // 初始化加载文件列表
+    this.$nextTick(() => {
+      this.listRefresh();
+    });
   },
   beforeDestroy() {
     // Clean up event listener to avoid memory leaks

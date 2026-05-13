@@ -93,4 +93,8 @@
   .icon-list:before {
     content: "\e67a";
   }
+
+  .icon-tree:before {
+    content: "\e610";
+  }
   
