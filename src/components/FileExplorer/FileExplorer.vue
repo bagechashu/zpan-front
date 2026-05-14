@@ -10,6 +10,7 @@
     <!-- explorer -->
     <GridExplorer v-model="rows" :loading="loading" :moreButtons="moreButtons" @on-click="onClick" v-if="layout == 'grid'" />
     <TreeExplorer v-model="rows" :loading="loading" :dataLoader="dataLoader" :rowButtons="rowButtons" :moreButtons="moreButtons" @on-click="onClick" v-else-if="layout == 'tree'" />
+    <ColumnsExplorer v-model="rows" :loading="loading" :dataLoader="dataLoader" :rowButtons="rowButtons" :moreButtons="moreButtons" @on-click="onClick" v-else-if="layout == 'columns'" />
     <ListExplorer v-model="rows" :loading="loading" :rowButtons="rowButtons" :moreButtons="moreButtons" @on-click="onClick" @scroll-end="onScrollEnd" @selection-change="onSelectionChange" v-else />
   </div>
 </template>
@@ -18,11 +19,13 @@
 import GridExplorer from "./explorer/GridExplorer";
 import ListExplorer from "./explorer/ListExplorer";
 import TreeExplorer from "./explorer/TreeExplorer";
+import ColumnsExplorer from "./explorer/ColumnsExplorer";
 export default {
   components: {
     GridExplorer,
     ListExplorer,
     TreeExplorer,
+    ColumnsExplorer,
   },
   props: {
     layout: {

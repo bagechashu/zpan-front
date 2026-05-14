@@ -24,6 +24,8 @@
   transition: opacity 0.3s ease;
   color: #606266;
   filter: invert(0.2);
+  font-size: 18px;
+  line-height: 24px;
 }
 
 .view-icon:hover {
@@ -64,6 +66,10 @@
         <el-tooltip content="Grid View" placement="top">
           <img v-if="layout == 'grid'" class="view-icon" src="@/assets/icon-grid.svg" alt="grid" style="opacity: 0.5" />
           <img v-else class="view-icon" src="@/assets/icon-grid.svg" alt="grid" @click="layout = 'grid'" />
+        </el-tooltip>
+        <el-tooltip content="Columns View" placement="top">
+          <img v-if="layout == 'columns'" class="view-icon" src="@/assets/icon-columns.svg" alt="columns" style="opacity: 0.5" />
+          <img v-else class="view-icon" src="@/assets/icon-columns.svg" alt="columns" @click="layout = 'columns'" />
         </el-tooltip>
       </div>
     </el-row>
