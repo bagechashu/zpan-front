@@ -30,6 +30,7 @@ let router = new Router({
     { path: '/s/:alias/draw', name: 'share-draw', component: () => import('./views/home/share/draw.vue') },
     { path: '/f/editor', name: 'editor', component: () => import('./views/home/editor') },
     { path: '/viewer/pdf', name: 'viewer', component: () => import('./views/home/viewer/pdf') },
+    { path: '/viewer/doc', name: 'doc-viewer', component: () => import('./views/home/viewer/doc') },
     {
       path: '/settings',
       component: () => import('./views/settings'),

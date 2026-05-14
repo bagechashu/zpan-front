@@ -37,6 +37,9 @@ module.exports = {
     // whether to use eslint-loader for lint on save.
     lintOnSave: false,
 
+    // Handle vue-plyr dependency
+    transpileDependencies: ['vue-plyr'],
+
     // tweak internal webpack configuration.
     chainWebpack: config => {
         config.when(process.env.NODE_ENV !== 'development', //生产环境才做处理
@@ -79,6 +82,7 @@ module.exports = {
             alias: {
                 'vue$': 'vue/dist/vue.esm.js',
                 '@': resolve('src'),
+                'plyr': resolve('node_modules/plyr/dist/plyr.js')
             }
         };
         // 生产环境相关配置cdn/gzip压缩
@@ -165,10 +169,6 @@ module.exports = {
             fallbackLocale: 'en',
             localeDir: 'locales',
             enableInSFC: true
-        },
-        'style-resources-loader': {
-            preProcessor: 'stylus',
-            patterns: []
         }
     }
 }

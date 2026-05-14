@@ -377,21 +377,24 @@ export default {
 };
 </script>
 
-<style lang="stylus">
-.uploader
-  .size
-    color: #878c9c;
+<style lang="css">
+.uploader .size {
+  color: #878c9c;
+}
 
-  .speed
-    color: #06a7ff;
-    float: right;
+.uploader .speed {
+  color: #06a7ff;
+  float: right;
+}
 
-  .tip
-    color: #afb3bf;
-    margin-top: 10px;
-    text-align: center;
+.uploader .tip {
+  color: #afb3bf;
+  margin-top: 10px;
+  text-align: center;
+}
 
-  .matter-icon
-    font-size: 35px;
-    padding-left: 5px;
+.uploader .matter-icon {
+  font-size: 35px;
+  padding-left: 5px;
+}
 </style>

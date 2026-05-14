@@ -276,6 +276,17 @@
   "upload": {
     "max-files-tip": "每次最多允许 {max} 个文件同时上传，请分批操作！"
   },
+  "viewer": {
+    "doc": {
+      "title": "文档预览",
+      "download": "下载",
+      "close": "关闭",
+      "loading": "加载中...",
+      "no-link": "未提供文档链接",
+      "preview-failed": "此文档无法在浏览器中预览。请使用下载功能下载后在本地预览。",
+      "load-error": "加载失败"
+    }
+  },
   "signup": {
     "title": "用户注册",
     "email-placeholder": "电子邮箱",

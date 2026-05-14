@@ -103,7 +103,6 @@ export default {
         dir: "",
       },
       layout: "list",
-      folderBtnShown: false,
       moreButtons: [
         { name: "move", title: this.$t("ftb.move"), action: this.move, shown: (item) => !item.dirtype },
         { name: "rename", title: this.$t("ftb.rename"), action: this.rename, shown: (item) => !item.dirtype },
@@ -115,19 +114,20 @@ export default {
   watch: {
     $route(newVal, oldVal) {
       this.query.type = newVal.query.type; // doc,image,audio,vedio
-      this.folderBtnShown = !this.query.type;
     },
   },
   computed: {
     rowButtons() {
       if (this.cs.mode == 1) {
         return [
+          { name: "preview", icon: "el-icon-view", action: this.previewFile, shown: (item) => !item.dirtype && this.isPreviewable(item) },
           { name: "download", icon: "el-icon-download", action: this.openDownload, shown: (item) => !item.dirtype },
           { name: "share", icon: "el-icon-share", action: this.share },
         ];
       }
 
       return [
+        { name: "preview", icon: "el-icon-view", action: this.previewFile, shown: (item) => !item.dirtype && this.isPreviewable(item) },
         { name: "download", icon: "el-icon-download", action: this.openDownload, shown: (item) => !item.dirtype },
         { name: "viewlink", icon: "el-icon-view", action: this.viewlink },
       ];
@@ -144,7 +144,6 @@ export default {
       this.query.limit = limit ? limit : 10;
       return new Promise((resolve, reject) => {
         this.$zpan.File.list(this.query).then((ret) => {
-          this.query.kw = "";
           resolve(ret);
         }).catch((err) => {
           this.$message({
@@ -174,6 +173,11 @@ export default {
         a.setAttribute("download", obj.name);
         a.click();
         a.remove();
+      }).catch((err) => {
+        this.$message({
+          type: "error",
+          message: this.$t("msg.download-failed") || "Download failed",
+        });
       });
     },
     openCreateFolderDiglog() {
@@ -187,50 +191,47 @@ export default {
             message: this.$t("msg.create-success"),
           });
           this.listRefresh();
+        }).catch((err) => {
+          this.$message({
+            type: "error",
+            message: this.$t("msg.create-failed") || "Create folder failed",
+          });
         });
-      });
+      }).catch(() => {});
     },
     openCreateFileDiglog() {
-      var filename 
-      var fileext = '.md'
-      var message = <el-input placeholder={this.$t('tips.create-file')} v-model={filename} class="input-with-select">
-    <el-select v-model={fileext} slot="append" placeholder={this.$t('dialog.upload-placeholder')} style="width: 70px">
-      <el-option label=".txt" value=".txt"></el-option>
-      <el-option label=".md" value=".md"></el-option>
-    </el-select>
-  </el-input>
-      this.$msgbox({
-        title: this.$t("op.create-file"),
-        message: message,
-        showCancelButton: true,
-        confirmButtonText: this.$t("op.confirm"),
-        cancelButtonText: this.$t("op.cancel"),
-      }).then(({ value }) => {
-          let fileObj = {
-            file: new File([""], value, {type: "text/plain"}),
-            filename: value
-          }
-
-          this.$zpan.File.upload(this.getSid(), fileObj).then((data) => {
-            window.open(`f/editor?alias=${data.alias}`, "_blank")
+      this.$prompt(
+        this.$t('tips.create-file'),
+        this.$t('op.create-file'),
+        {
+          inputValue: 'Untitled.md',
+          confirmButtonText: this.$t('op.confirm'),
+          cancelButtonText: this.$t('op.cancel'),
+        }
+      ).then(({ value }) => {
+        const fileObj = {
+          file: new File([''], value, { type: 'text/plain' }),
+          filename: value
+        };
+        this.$zpan.File.upload(this.getSid(), fileObj).then((data) => {
+          this.$message({
+            type: "success",
+            message: this.$t("msg.create-success"),
           });
-      });
+          this.listRefresh();
+          window.open(`f/editor?alias=${data.alias}`, '_blank');
+        }).catch((err) => {
+          this.$message({
+            type: "error",
+            message: this.$t("msg.upload-failed") || "Upload failed",
+          });
+        });
+      }).catch(() => {});
     },
     onUploadSelect(cmd) {
       this.$emit("upload-action", { type: cmd, sid: this.getSid(), dist: this.query.dir });
     },
-    onCreationSelect(cmd){
-      switch (cmd) {
-        case 'file':
-          this.openCreateFileDiglog()
-          break;
-        case 'folder':
-          this.openCreateFolderDiglog()
-          break;
-        default:
-          break;
-      }
-    },
+
     onFileOpen(type, obj, link) {
       if (obj.type.startsWith("audio")) {
         this.$emit("audio-open", obj, link);
@@ -238,6 +239,29 @@ export default {
       }
 
       new FileViewer().view(type, obj, link);
+    },
+    isPreviewable(item) {
+      // Check if file type is previewable (pdf, image, text, or doc)
+      if (item.type.endsWith("pdf")) return true;
+      if (item.type.startsWith("image")) return true;
+      if (item.type.startsWith("text")) return true;
+      if (item.type.startsWith("audio") || item.type.startsWith("video")) return true;
+      // Check if it's an office document
+      const docTypes = ["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
+      if (docTypes.includes(item.type)) return true;
+      return false;
+    },
+    previewFile(item) {
+      // Get the preview type based on file type
+      let type = 'doc'; // default to doc for office files
+      if (item.type.endsWith("pdf")) type = 'pdf';
+      else if (item.type.startsWith("image")) type = 'image';
+      else if (item.type.startsWith("text")) type = 'text';
+      else if (item.type.startsWith("audio") || item.type.startsWith("video")) type = 'media';
+      
+      this.linkLoader(item).then((link) => {
+        this.onFileOpen(type, item, link);
+      });
     },
     onOutlinkClick() {
       transfer(DialogOutlink)({ items: this.selectedItems });
@@ -313,13 +337,18 @@ export default {
         )
           .then((ret) => {
             this.listRefresh();
-            loading.close();
             this.$message({
               type: "success",
               message: this.$t("msg.batch-delete-success"),
             });
           })
           .catch((err) => {
+            this.$message({
+              type: "error",
+              message: this.$t("msg.batch-delete-failed") || "Delete failed",
+            });
+          })
+          .finally(() => {
             loading.close();
           });
       });
@@ -327,7 +356,6 @@ export default {
   },
   mounted() {
     this.query.type = this.$route.query.type;
-    this.folderBtnShown = !this.query.type;
     // 监听文件列表刷新事件（如上传完成后）
     this._fileListRefreshHandler = () => {
       if (this && typeof this.listRefresh === 'function') {

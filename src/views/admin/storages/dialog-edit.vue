@@ -200,11 +200,13 @@ export default {
 };
 </script>
 
-<style lang="stylus" >
-.el-drawer__body
+<style lang="css">
+.el-drawer__body {
   overflow: auto;
+}
 
-.footer
+.footer {
   margin-left: 142px;
   margin-top: 25px;
+}
 </style>

@@ -272,8 +272,16 @@
     "email-required": "Please enter your email address",
     "email-invalid": "Please enter a valid email address"
   },
-  "upload": {
-    "max-files-tip": "You can upload a maximum of {max} files at a time, please batch them!"
+  "viewer": {
+    "doc": {
+      "title": "Document Preview",
+      "download": "Download",
+      "close": "Close",
+      "loading": "Loading...",
+      "no-link": "No document link provided",
+      "preview-failed": "This document cannot be previewed in the browser. Please use the download function to download it and then preview it locally.",
+      "load-error": "Failed to load"
+    }
   },
   "signup": {
     "title": "User Registration",
