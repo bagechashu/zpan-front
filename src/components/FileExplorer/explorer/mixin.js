@@ -1,3 +1,5 @@
+import { getViewerType, isOfficeFile as checkOfficeFile, getFileIcon as getIconClass } from '@/libs/zpan/fileTypeConfig'
+
 const mixin = {
     props: {
         value: Array,
@@ -18,49 +20,16 @@ const mixin = {
     },
     methods: {
         isOfficeFile(type) {
-            let officeTypes = ["application/msword", "application/vnd.ms-excel", "application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.openxmlformats-officedocument.presentationml.presentation"];
-            return officeTypes.includes(type);
+            // 使用统一的配置检查
+            return checkOfficeFile(type);
         },
         officeIcon(type) {
-            let docTypes = ["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
-            let excelTypes = ["application/vnd.ms-excel", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"];
-            let pptTypes = ["application/vnd.ms-powerpoint", "application/vnd.openxmlformats-officedocument.presentationml.presentation"]
-            if (docTypes.includes(type)) {
-                return 'icon-doc'
-            } else if (excelTypes.includes(type)) {
-                return 'icon-excel'
-            } else if (pptTypes.includes(type)) {
-                return 'icon-ppt'
-            }
-
+            // 使用统一的配置获取图标
+            return getIconClass(type);
         },
         type2icon(type) {
-            let [t1, t2] = type.split('/')
-            let mt = ['pdf', 'html', 'xml', 'psd', 'rtf']
-            if (mt.includes(t2)) {
-                return `icon-${t2}`
-            }
-
-            let codeTypes = ['json', 'yaml', 'x-yaml']
-            if (codeTypes.includes(t2)) {
-                return 'icon-html'
-            }
-
-            let compressedFileTypes = ['zip', 'x-gzip']
-            if (compressedFileTypes.includes(t2)) {
-                return 'icon-compressed-file'
-            }
-
-            if (this.isOfficeFile(type)) {
-                return this.officeIcon(type)
-            }
-
-            let gt = ['audio', 'video', 'image', 'text']
-            if (gt.includes(t1)) {
-                return `icon-${t1}`
-            }
-
-            return 'icon-file'
+            // 使用统一的配置获取图标类名
+            return getIconClass(type);
         },
         onNameClick(item) {
             // open a folder
@@ -69,35 +38,16 @@ const mixin = {
                 return;
             }
 
-            // preview pdf file
-            if (item.type.endsWith("pdf")) {
-                this.$emit("on-click", 'pdf', item)
+            // 使用统一的配置获取 viewer 类型
+            const viewerType = getViewerType(item.type, item.name);
+            if (viewerType) {
+                this.$emit("on-click", viewerType, item)
                 return;
             }
 
-            // preview image file
-            if (item.type.startsWith("text")) {
-                this.$emit("on-click", 'text', item)
-                return;
-            }
-
-            // preview image file
-            if (item.type.startsWith("image")) {
-                this.$emit("on-click", 'image', item)
-                return;
-            }
-
-            // preview media file
-            if (item.type.startsWith("audio") || item.type.startsWith("video")) {
-                this.$emit("on-click", 'media', item)
-                return;
-            }
-
-            // preview office file
-            if (this.isOfficeFile(item.type)) {
-                this.$emit("on-click", 'doc', item)
-                return;
-            }
+            // 默认预览（不应该到这里）
+            console.warn('[WARNING] Unknown file type:', { name: item.name, type: item.type })
+            this.$emit("on-click", 'doc', item)
         },
     }
 }

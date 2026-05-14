@@ -48,6 +48,7 @@
 
 <script>
 import mixin from "./mixin";
+import { getViewerType } from '@/libs/zpan/fileTypeConfig';
 
 export default {
   mixins: [mixin],
@@ -99,8 +100,9 @@ export default {
       } else {
         // Remove columns after this one for files
         this.columns = this.columns.slice(0, columnIndex + 1);
-        // Emit the file open event
-        this.$emit("on-click", "file", item);
+        // 使用统一的文件类型配置获取 viewer 类型
+        const viewerType = getViewerType(item.type, item.name);
+        this.$emit("on-click", viewerType || "file", item);
       }
     },
     loadColumnContent(folderName, folderPath, columnIndex) {

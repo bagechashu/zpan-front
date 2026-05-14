@@ -89,6 +89,7 @@
 // @ is an alias to /src
 import { transfer } from "@/helper";
 import FileViewer from "@/components/FileViewer";
+import { getViewerType, isPreviewable as checkPreviewable } from "@/libs/zpan/fileTypeConfig";
 import DialogMove from "./components/DialogMove";
 import DialogShare from "./components/DialogShare";
 import DialogUpload from "./components/DialogUpload";
@@ -241,23 +242,14 @@ export default {
       new FileViewer().view(type, obj, link);
     },
     isPreviewable(item) {
-      // Check if file type is previewable (pdf, image, text, or doc)
-      if (item.type.endsWith("pdf")) return true;
-      if (item.type.startsWith("image")) return true;
-      if (item.type.startsWith("text")) return true;
-      if (item.type.startsWith("audio") || item.type.startsWith("video")) return true;
-      // Check if it's an office document
-      const docTypes = ["application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
-      if (docTypes.includes(item.type)) return true;
-      return false;
+      // 使用统一的文件类型配置检查是否可预览
+      return checkPreviewable(item.type, item.name);
     },
     previewFile(item) {
-      // Get the preview type based on file type
-      let type = 'doc'; // default to doc for office files
-      if (item.type.endsWith("pdf")) type = 'pdf';
-      else if (item.type.startsWith("image")) type = 'image';
-      else if (item.type.startsWith("text")) type = 'text';
-      else if (item.type.startsWith("audio") || item.type.startsWith("video")) type = 'media';
+      // 使用统一的文件类型配置获取 viewer 类型
+      const type = getViewerType(item.type, item.name) || 'doc';
+      
+      console.log('[DEBUG] Preview file:', { name: item.name, mimeType: item.type, viewerType: type });
       
       this.linkLoader(item).then((link) => {
         this.onFileOpen(type, item, link);

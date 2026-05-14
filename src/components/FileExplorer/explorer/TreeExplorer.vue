@@ -78,6 +78,7 @@
 
 <script>
 import mixin from "./mixin";
+import { getViewerType } from '@/libs/zpan/fileTypeConfig';
 
 export default {
   mixins: [mixin],
@@ -259,36 +260,14 @@ export default {
         return;
       }
 
-      // 根据文件类型发出不同的事件
-      const fileType = data.type || '';
-
-      if (fileType.endsWith('pdf')) {
-        this.$emit('on-click', 'pdf', data);
-        return;
+      // 使用统一的文件类型配置获取 viewer 类型
+      const viewerType = getViewerType(data.type, data.name);
+      if (viewerType) {
+        this.$emit('on-click', viewerType, data);
+      } else {
+        // 未知类型的文件
+        this.$emit('on-click', 'file', data);
       }
-
-      if (fileType.startsWith('text')) {
-        this.$emit('on-click', 'text', data);
-        return;
-      }
-
-      if (fileType.startsWith('image')) {
-        this.$emit('on-click', 'image', data);
-        return;
-      }
-
-      if (fileType.startsWith('audio') || fileType.startsWith('video')) {
-        this.$emit('on-click', 'media', data);
-        return;
-      }
-
-      if (this.isOfficeFile(fileType)) {
-        this.$emit('on-click', 'doc', data);
-        return;
-      }
-
-      // 其他类型文件
-      this.$emit('on-click', 'file', data);
     },
 
     /**

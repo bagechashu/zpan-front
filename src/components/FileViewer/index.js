@@ -14,6 +14,12 @@ class Preview {
             case "pdf":
                 window.open(`/viewer/pdf?link=${encodeURIComponent(link)}&title=${obj.name}`, '_blank')
                 break;
+            case "xlsx":
+                window.open(`/viewer/xlsx?link=${encodeURIComponent(link)}&title=${obj.name}`, '_blank')
+                break;
+            case "pptx":
+                window.open(`/viewer/pptx?link=${encodeURIComponent(link)}&title=${obj.name}`, '_blank')
+                break;
             case "doc":
                 window.open(`/viewer/doc?link=${encodeURIComponent(link)}&title=${obj.name}`, '_blank')
                 break;

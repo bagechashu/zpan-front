@@ -31,6 +31,8 @@ let router = new Router({
     { path: '/f/editor', name: 'editor', component: () => import('./views/home/editor') },
     { path: '/viewer/pdf', name: 'viewer', component: () => import('./views/home/viewer/pdf') },
     { path: '/viewer/doc', name: 'doc-viewer', component: () => import('./views/home/viewer/doc') },
+    { path: '/viewer/xlsx', name: 'xlsx-viewer', component: () => import('./views/home/viewer/xlsx') },
+    { path: '/viewer/pptx', name: 'pptx-viewer', component: () => import('./views/home/viewer/pptx') },
     {
       path: '/settings',
       component: () => import('./views/settings'),
