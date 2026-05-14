@@ -53,18 +53,16 @@
         <el-input class="search" size="small" :placeholder="$t('topbar.search')" v-model="query.kw" @keyup.enter.native="listRefresh">
           <i slot="prefix" class="el-input__icon el-icon-search"></i>
         </el-input>
-        <el-tooltip content="Tree View" placement="top">
-          <img v-if="layout != 'tree'" class="view-icon" src="@/assets/icon-tree.svg" alt="tree" @click="layout = 'tree'" />
-          <img v-else class="view-icon" src="@/assets/icon-tree.svg" alt="tree" @click="layout = 'list'" style="opacity: 0.5" />
-        </el-tooltip>
         <el-tooltip content="List View" placement="top">
-          <img v-if="layout == 'tree'" class="view-icon" src="@/assets/icon-list.svg" alt="list" @click="layout = 'list'" />
-          <img v-else-if="layout == 'list'" class="view-icon" src="@/assets/icon-list.svg" alt="list" @click="layout = 'grid'" style="opacity: 0.5" />
+          <img v-if="layout == 'list'" class="view-icon" src="@/assets/icon-list.svg" alt="list" style="opacity: 0.5" />
           <img v-else class="view-icon" src="@/assets/icon-list.svg" alt="list" @click="layout = 'list'" />
         </el-tooltip>
+        <el-tooltip content="Tree View" placement="top">
+          <img v-if="layout == 'tree'" class="view-icon" src="@/assets/icon-tree.svg" alt="tree" style="opacity: 0.5" />
+          <img v-else class="view-icon" src="@/assets/icon-tree.svg" alt="tree" @click="layout = 'tree'" />
+        </el-tooltip>
         <el-tooltip content="Grid View" placement="top">
-          <img v-if="layout == 'list'" class="view-icon" src="@/assets/icon-grid.svg" alt="grid" @click="layout = 'grid'" />
-          <img v-else-if="layout == 'grid'" class="view-icon" src="@/assets/icon-grid.svg" alt="grid" @click="layout = 'list'" style="opacity: 0.5" />
+          <img v-if="layout == 'grid'" class="view-icon" src="@/assets/icon-grid.svg" alt="grid" style="opacity: 0.5" />
           <img v-else class="view-icon" src="@/assets/icon-grid.svg" alt="grid" @click="layout = 'grid'" />
         </el-tooltip>
       </div>
@@ -98,7 +96,7 @@ export default {
         kw: "",
         dir: "",
       },
-      layout: "tree",
+      layout: "list",
       folderBtnShown: false,
       moreButtons: [
         { name: "move", title: this.$t("ftb.move"), action: this.move, shown: (item) => !item.dirtype },
