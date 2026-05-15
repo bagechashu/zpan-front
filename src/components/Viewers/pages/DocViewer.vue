@@ -5,11 +5,8 @@
         <h2 class="doc-title">{{ title }}</h2>
       </div>
       <div class="doc-toolbar-right">
-        <!-- <button class="doc-btn" @click="downloadDoc" :title="$t('viewer.doc.download')">
-          <i class="el-icon-download"></i> {{ $t('viewer.doc.download') }}
-        </button> -->
         <button class="doc-btn" @click="closeViewer" :title="$t('viewer.doc.close')">
-          <i class="el-icon-close"></i> {{ $t('viewer.doc.close') }}
+          <i class="el-icon-close"></i>
         </button>
       </div>
     </div>
@@ -53,7 +50,6 @@ export default {
           return
         }
 
-        // 尝试直接 fetch（用于本地测试或已配置 CORS 的存储）
         let arrayBuffer
         try {
           const response = await fetch(this.link)
@@ -63,28 +59,23 @@ export default {
           const blob = await response.blob()
           arrayBuffer = await blob.arrayBuffer()
         } catch (fetchErr) {
-          // 如果直接 fetch 失败（如 CORS 错误），提示用户使用下载功能
           console.error('Direct fetch failed:', fetchErr)
           this.error = this.$t('viewer.doc.preview-failed')
           this.loading = false
           return
         }
 
-        // 使用 mammoth 转换
         const result = await mammoth.convertToHtml({ arrayBuffer })
         const html = result.value
         const messages = result.messages
 
-        // 记录任何转换消息（警告等）
         if (messages.length > 0) {
           console.warn('Mammoth conversion messages:', messages)
         }
 
-        // 渲染到容器
         const container = document.getElementById('docPreview')
         container.innerHTML = html
 
-        // 添加默认样式
         this.applyDefaultStyles()
 
         this.loading = false
@@ -97,7 +88,6 @@ export default {
     applyDefaultStyles() {
       const container = document.getElementById('docPreview')
       if (container) {
-        // 为 img 标签添加样式
         const images = container.querySelectorAll('img')
         images.forEach(img => {
           img.style.maxWidth = '100%'
@@ -105,7 +95,6 @@ export default {
           img.style.marginBottom = '10px'
         })
 
-        // 为表格添加样式
         const tables = container.querySelectorAll('table')
         tables.forEach(table => {
           table.style.borderCollapse = 'collapse'
@@ -119,14 +108,6 @@ export default {
           cell.style.padding = '8px'
         })
       }
-    },
-    downloadDoc() {
-      const a = document.createElement('a')
-      a.href = this.link
-      a.download = this.title
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
     },
     closeViewer() {
       window.close()
@@ -209,113 +190,21 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #f56c6c;
   font-size: 14px;
+  color: #f56c6c;
+  background-color: #fef0f0;
+  margin: 20px;
   padding: 20px;
-}
-
-.doc-error p {
-  margin: 0;
+  border-radius: 4px;
+  border: 1px solid #fde2e2;
 }
 
 .doc-content {
   flex: 1;
-  overflow-y: auto;
+  overflow: auto;
   padding: 20px;
   background-color: #fff;
-  margin: 20px;
+  margin: 10px;
   border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-}
-
-.doc-content >>> p {
-  margin: 0 0 10px 0;
-  line-height: 1.6;
-  color: #333;
-}
-
-.doc-content >>> h1,
-.doc-content >>> h2,
-.doc-content >>> h3,
-.doc-content >>> h4,
-.doc-content >>> h5,
-.doc-content >>> h6 {
-  margin: 15px 0 10px 0;
-  line-height: 1.4;
-  color: #222;
-}
-
-.doc-content >>> h1 {
-  font-size: 24px;
-}
-
-.doc-content >>> h2 {
-  font-size: 20px;
-}
-
-.doc-content >>> h3 {
-  font-size: 18px;
-}
-
-.doc-content >>> ul,
-.doc-content >>> ol {
-  margin: 10px 0;
-  padding-left: 30px;
-}
-
-.doc-content >>> li {
-  margin: 5px 0;
-  color: #333;
-}
-
-.doc-content >>> blockquote {
-  border-left: 4px solid #409eff;
-  padding-left: 15px;
-  margin: 10px 0;
-  color: #666;
-}
-
-.doc-content >>> code {
-  background-color: #f5f5f5;
-  padding: 2px 6px;
-  border-radius: 3px;
-  font-family: 'Monaco', 'Courier New', monospace;
-  font-size: 13px;
-  color: #d63384;
-}
-
-.doc-content >>> pre {
-  background-color: #f5f5f5;
-  padding: 12px;
-  border-radius: 4px;
-  overflow-x: auto;
-  margin: 10px 0;
-}
-
-.doc-content >>> table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 15px 0;
-}
-
-.doc-content >>> th,
-.doc-content >>> td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: left;
-}
-
-.doc-content >>> th {
-  background-color: #f9f9f9;
-  font-weight: 600;
-  color: #333;
-}
-
-.doc-content >>> img {
-  max-width: 100%;
-  height: auto;
-  margin: 15px 0;
-  border-radius: 4px;
-  display: block;
 }
 </style>

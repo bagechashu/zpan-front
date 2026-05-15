@@ -1,11 +1,22 @@
 <template>
   <div class="xlsx-viewer">
-    <div class="toolbar">
-      <div class="title">{{ title }}</div>
+    <div class="xlsx-toolbar">
+      <div class="xlsx-toolbar-left">
+        <h2 class="xlsx-title">{{ title }}</h2>
+      </div>
+      <div class="xlsx-toolbar-right">
+        <button class="xlsx-btn" @click="closeViewer" :title="$t('viewer.close', 'Close')">
+          <i class="el-icon-close"></i>
+        </button>
+      </div>
+    </div>
+    <div class="sheet-tabs-container" v-if="sheetNames.length > 0">
       <div class="sheet-tabs">
-        <span v-for="(sheetName, index) in sheetNames" :key="index" 
-              :class="['tab', { active: activeSheet === index }]"
-              @click="activeSheet = index">
+        <span 
+          v-for="(sheetName, index) in sheetNames" 
+          :key="index" 
+          :class="['tab', { active: activeSheet === index }]"
+          @click="activeSheet = index">
           {{ sheetName }}
         </span>
       </div>
@@ -65,25 +76,24 @@ export default {
         console.error('Error loading file:', error)
       }
     },
+    closeViewer() {
+      window.close()
+    },
     loadSheet(sheetIndex) {
       if (!this.workbook || !this.sheetNames[sheetIndex]) return
       
       const sheetName = this.sheetNames[sheetIndex]
       const worksheet = this.workbook.Sheets[sheetName]
       
-      // Convert worksheet to JSON with custom header
       const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 })
       
       if (jsonData.length > 0) {
-        // First row as headers
         this.headers = jsonData[0].map((cell, index) => {
-          // If cell is empty, use column letter
           return cell !== undefined && cell !== null && cell !== '' 
             ? cell 
             : this.getColumnLetter(index)
         })
         
-        // Rest as table data
         this.tableData = jsonData.slice(1)
       } else {
         this.headers = []
@@ -120,25 +130,69 @@ export default {
   background-color: #f5f5f5;
 }
 
-.toolbar {
-  background-color: white;
-  border-bottom: 1px solid #ddd;
-  padding: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.xlsx-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background-color: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
-.title {
+.xlsx-toolbar-left {
+  flex: 1;
+}
+
+.xlsx-title {
+  margin: 0;
   font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 8px;
+  font-weight: 600;
   color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.xlsx-toolbar-right {
+  display: flex;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.xlsx-btn {
+  padding: 8px 12px;
+  background-color: #409eff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background-color 0.3s;
+}
+
+.xlsx-btn:hover {
+  background-color: #66b1ff;
+}
+
+.xlsx-btn:active {
+  background-color: #0a7bc4;
+}
+
+.sheet-tabs-container {
+  background-color: white;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 0 20px;
 }
 
 .sheet-tabs {
   display: flex;
   gap: 10px;
   overflow-x: auto;
-  padding-bottom: 5px;
+  padding: 8px 0;
 }
 
 .tab {
@@ -199,13 +253,8 @@ export default {
   text-align: center;
 }
 
-.data-table tbody tr:hover {
-  background-color: #f9f9f9;
-}
-
 .cell {
   max-width: 200px;
   word-break: break-word;
-  white-space: pre-wrap;
 }
 </style>

@@ -8,11 +8,12 @@
 <script>
 import VuePdfApp from "vue-pdf-app";
 import "vue-pdf-app/dist/icons/main.css";
+
 export default {
+  name: "PdfViewer",
   components: {
     VuePdfApp,
   },
-
   data() {
     return {
       title: "",

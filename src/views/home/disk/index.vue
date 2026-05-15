@@ -88,7 +88,7 @@
 <script>
 // @ is an alias to /src
 import { transfer } from "@/helper";
-import FileViewer from "@/components/FileViewer";
+import PreviewManager from "@/components/Viewers";
 import { getViewerType, isPreviewable as checkPreviewable } from "@/libs/zpan/fileTypeConfig";
 import DialogMove from "./components/DialogMove";
 import DialogShare from "./components/DialogShare";
@@ -239,7 +239,7 @@ export default {
         return;
       }
 
-      new FileViewer().view(type, obj, link);
+      PreviewManager.preview(type, obj, link);
     },
     isPreviewable(item) {
       // 使用统一的文件类型配置检查是否可预览

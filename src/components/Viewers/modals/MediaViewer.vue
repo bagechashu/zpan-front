@@ -1,10 +1,10 @@
 <template>
   <el-dialog :title="title" :visible.sync="show" width="30%" @opened="onOpen" @close="onClose">
-    <vue-plyr ref="audio" v-show="mediatype == 'audio'">
+    <vue-plyr ref="audio" v-show="mediatype === 'audio'">
       <audio :src="url"></audio>
     </vue-plyr>
 
-    <vue-plyr ref="video" v-show="mediatype == 'video'">
+    <vue-plyr ref="video" v-show="mediatype === 'video'">
       <video :src="url"></video>
     </vue-plyr>
   </el-dialog>
@@ -12,8 +12,10 @@
 
 <script>
 import { DialogMixin } from "@/libs/mixin";
+
 export default {
   mixins: [DialogMixin],
+  name: "MediaViewer",
   props: {
     title: String,
     type: String,
@@ -25,7 +27,7 @@ export default {
     };
   },
   watch: {
-    visible(n, o) {
+    visible(n) {
       this.show = n;
     },
   },
